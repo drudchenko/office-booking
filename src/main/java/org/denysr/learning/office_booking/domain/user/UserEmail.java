@@ -15,15 +15,18 @@ public class UserEmail {
 
     String email;
 
-    public UserEmail(String email) {
+    public UserEmail(final String email) {
         ValidatorWrapper.wrapValidators(
-                () -> Validate.notBlank(email, "Email cannot be empty"),
+                () -> Validate.notBlank(email, "Email cannot be empty")
+        );
+        final String emailTrimmed = email.trim();
+        ValidatorWrapper.wrapValidators(
                 () -> Validate.inclusiveBetween(
-                        MIN_EMAIL_LENGTH, MAX_EMAIL_LENGTH, email.length(),
+                        MIN_EMAIL_LENGTH, MAX_EMAIL_LENGTH, emailTrimmed.length(),
                         WRONG_EMAIL_LENGTH_ERROR_MESSAGE
                 ),
-                () -> Validate.isTrue(EMAIL_VALIDATOR.isValid(email), "Invalid email provided")
+                () -> Validate.isTrue(EMAIL_VALIDATOR.isValid(emailTrimmed), "Invalid email provided")
         );
-        this.email = email;
+        this.email = emailTrimmed;
     }
 }
