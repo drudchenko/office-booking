@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.tuple.Pair;
 import org.denysr.learning.office_booking.domain.booking.*;
+import org.denysr.learning.office_booking.domain.date.DateRange;
 import org.denysr.learning.office_booking.domain.user.User;
 import org.denysr.learning.office_booking.domain.user.UserId;
 import org.denysr.learning.office_booking.infrastructure.rest.BookingResponseEntity;
@@ -37,7 +38,7 @@ public class OfficeBookingController {
         try {
             BookingId bookingId = bookingManagement.insertBooking(
                     new UserId(userId),
-                    new BookingTimeframe(startDate, endDate)
+                    new BookingDateRange(startDate, endDate)
             );
             return ResponseEntity.status(HttpStatus.CREATED).body(bookingId);
         } catch (IllegalArgumentException e) {
@@ -55,11 +56,11 @@ public class OfficeBookingController {
             LocalDate businessDay
     ) {
         try {
-            final Week week = new Week(businessDay);
-            List<Pair<Booking, User>> bookings = bookingManagement.fetchAllBookingsForWeek(week);
+            final BusinessWeek businessWeek = new BusinessWeek(businessDay);
+            List<Pair<Booking, User>> bookings = bookingManagement.fetchAllBookingsForWeek(businessWeek);
             return ResponseEntity.ok().body(
                     bookings.stream()
-                            .map(booking -> bookingToResponseEntity(booking, week))
+                            .map(booking -> bookingToResponseEntity(booking, businessWeek))
                             .collect(Collectors.toList())
             );
         } catch (IllegalArgumentException e) {
@@ -88,8 +89,8 @@ public class OfficeBookingController {
         }
     }
 
-    private BookingResponseEntity bookingToResponseEntity(Pair<Booking, User> booking, Week week) {
-        final BookingTimeframe timeframeForWeek = booking.getLeft().getBookingTimeframe().getRangeForWeek(week);
+    private BookingResponseEntity bookingToResponseEntity(Pair<Booking, User> booking, BusinessWeek businessWeek) {
+        final DateRange timeframeForWeek = booking.getLeft().getBookingDateRange().getRangeForWeek(businessWeek);
         return new BookingResponseEntity(
                 booking.getLeft().getBookingId().getBookingId(),
                 booking.getRight().getUserName().getFullName(),

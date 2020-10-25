@@ -1,16 +1,16 @@
 package org.denysr.learning.office_booking.domain.user;
 
-import lombok.Data;
+import lombok.Value;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.util.Assert;
 
-@Data
+@Value
 public class UserEmail {
     private final static int MIN_EMAIL_LENGTH = 6;
     private final static int MAX_EMAIL_LENGTH = 100;
     private final static EmailValidator EMAIL_VALIDATOR = EmailValidator.getInstance(false);
 
-    private final String email;
+    String email;
 
     public UserEmail(String email) {
         Assert.notNull(email, "Email cannot be empty");

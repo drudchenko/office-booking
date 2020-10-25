@@ -1,11 +1,11 @@
 package org.denysr.learning.office_booking.domain.user;
 
-import lombok.Data;
+import lombok.Value;
 import org.springframework.util.Assert;
 
-@Data
+@Value
 public class UserId implements Comparable<UserId> {
-    private final int userId;
+    int userId;
 
     public UserId(int userId) {
         Assert.isTrue(userId > 0, "User id should be above 0.");

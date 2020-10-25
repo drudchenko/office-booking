@@ -1,11 +1,11 @@
 package org.denysr.learning.office_booking.domain.booking;
 
-import lombok.Data;
+import lombok.Value;
 import org.springframework.util.Assert;
 
-@Data
+@Value
 public class BookingId implements Comparable<BookingId> {
-    private final int bookingId;
+    int bookingId;
 
     public BookingId(int bookingId) {
         Assert.isTrue(bookingId > 0, "Booking id should be above 0.");

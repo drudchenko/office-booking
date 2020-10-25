@@ -12,13 +12,13 @@ public class Booking {
     @NonNull
     private final UserId userId;
     @NonNull
-    private final BookingTimeframe bookingTimeframe;
+    private final BookingDateRange bookingDateRange;
 
     public boolean hasId() {
         return !Objects.isNull(bookingId);
     }
 
     public Booking withBookingId(BookingId bookingId) {
-        return new Booking(bookingId, userId, bookingTimeframe);
+        return new Booking(bookingId, userId, bookingDateRange);
     }
 }

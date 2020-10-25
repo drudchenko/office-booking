@@ -18,11 +18,11 @@ public class BookingManagement {
     private final UserRepository userRepository;
     private final BookingRepository bookingRepository;
 
-    public BookingId insertBooking(UserId userId, BookingTimeframe bookingTimeframe) {
+    public BookingId insertBooking(UserId userId, BookingDateRange bookingDateRange) {
         Assert.notNull(userRepository.findUserById(userId), "User with mentioned id doesn't exist");
         // Additional validation could be provided here, like check for timeframe intersections for particular user etc
         // Should be implemented after communicating to domain expert/product owner.
-        Booking booking = new Booking(null, userId, bookingTimeframe);
+        Booking booking = new Booking(null, userId, bookingDateRange);
         return bookingRepository.saveBooking(booking);
     }
 
@@ -30,8 +30,8 @@ public class BookingManagement {
         bookingRepository.deleteBooking(bookingId);
     }
 
-    public List<Pair<Booking, User>> fetchAllBookingsForWeek(Week week) {
-        return bookingRepository.getBookingsForWeek(week)
+    public List<Pair<Booking, User>> fetchAllBookingsForWeek(BusinessWeek businessWeek) {
+        return bookingRepository.getBookingsForWeek(businessWeek)
                 .stream()
                 .map(this::fetchUserForBooking)
                 .collect(Collectors.toList());

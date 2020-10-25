@@ -4,7 +4,7 @@ package org.denysr.learning.office_booking.infrastructure.booking;
 import org.denysr.learning.office_booking.domain.booking.Booking;
 import org.denysr.learning.office_booking.domain.booking.BookingId;
 import org.denysr.learning.office_booking.domain.booking.BookingRepository;
-import org.denysr.learning.office_booking.domain.booking.Week;
+import org.denysr.learning.office_booking.domain.booking.BusinessWeek;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collections;
@@ -30,11 +30,11 @@ public class InMemoryBookingRepository implements BookingRepository {
     }
 
     @Override
-    public List<Booking> getBookingsForWeek(Week week) {
+    public List<Booking> getBookingsForWeek(BusinessWeek businessWeek) {
         return bookings
                 .values()
                 .stream()
-                .filter(booking -> booking.getBookingTimeframe().intersectsWith(week))
+                .filter(booking -> booking.getBookingDateRange().intersectsWith(businessWeek.getDateRange()))
                 .collect(Collectors.toList());
     }
 

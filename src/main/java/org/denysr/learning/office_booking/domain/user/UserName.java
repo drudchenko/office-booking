@@ -1,14 +1,14 @@
 package org.denysr.learning.office_booking.domain.user;
 
-import lombok.Data;
+import lombok.Value;
 import org.springframework.util.Assert;
 
-@Data
+@Value
 public class UserName {
     private static final int MAX_USER_NAME_LENGTH = 70;
 
-    private final String firstName;
-    private final String secondName;
+    String firstName;
+    String secondName;
 
     public UserName(String firstName, String secondName) {
         assertNameCorrect(firstName);
