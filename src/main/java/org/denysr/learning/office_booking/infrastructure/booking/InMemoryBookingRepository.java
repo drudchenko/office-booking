@@ -5,6 +5,7 @@ import org.denysr.learning.office_booking.domain.booking.Booking;
 import org.denysr.learning.office_booking.domain.booking.BookingId;
 import org.denysr.learning.office_booking.domain.booking.BookingRepository;
 import org.denysr.learning.office_booking.domain.booking.BusinessWeek;
+import org.denysr.learning.office_booking.domain.validation.IllegalValueException;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collections;
@@ -41,7 +42,7 @@ public class InMemoryBookingRepository implements BookingRepository {
     @Override
     public void deleteBooking(BookingId bookingId) {
         if (!bookings.containsKey(bookingId)) {
-            throw new IllegalStateException("Booking with the requested id doesn't exist!");
+            throw new IllegalValueException("Booking with the requested id doesn't exist!");
         }
         bookings.remove(bookingId);
     }
@@ -49,7 +50,7 @@ public class InMemoryBookingRepository implements BookingRepository {
     private BookingId changeBooking(Booking booking) {
         final BookingId bookingId = booking.getBookingId();
         if (!bookings.containsKey(bookingId)) {
-            throw new IllegalStateException("Attempt to change the nonexistent booking.");
+            throw new IllegalValueException("Attempt to change the nonexistent booking.");
         }
         bookings.put(bookingId, booking);
         return bookingId;

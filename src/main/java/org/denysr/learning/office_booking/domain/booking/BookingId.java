@@ -1,14 +1,17 @@
 package org.denysr.learning.office_booking.domain.booking;
 
 import lombok.Value;
-import org.springframework.util.Assert;
+import org.apache.commons.lang3.Validate;
+import org.denysr.learning.office_booking.domain.validation.ValidatorWrapper;
 
 @Value
 public class BookingId implements Comparable<BookingId> {
     int bookingId;
 
     public BookingId(int bookingId) {
-        Assert.isTrue(bookingId > 0, "Booking id should be above 0.");
+        ValidatorWrapper.wrapValidators(
+                () -> Validate.isTrue(bookingId > 0, "Booking id should be above 0.")
+        );
         this.bookingId = bookingId;
     }
 

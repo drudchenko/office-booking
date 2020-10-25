@@ -3,6 +3,7 @@ package org.denysr.learning.office_booking.controllers;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.denysr.learning.office_booking.domain.user.*;
+import org.denysr.learning.office_booking.domain.validation.IllegalValueException;
 import org.denysr.learning.office_booking.infrastructure.rest.UserResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +36,7 @@ public class UserController {
                     new UserName(firstName, secondName)
             ));
             return ResponseEntity.status(HttpStatus.CREATED).body(userId);
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalValueException e) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(e.getMessage());
         } catch (Exception e) {
             log.error("Error processing user creation", e);
@@ -61,7 +62,7 @@ public class UserController {
                     new UserName(firstName, secondName)
             ));
             return ResponseEntity.ok(userIdObject);
-        } catch (IllegalStateException e) {
+        } catch (IllegalValueException e) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(e.getMessage());
         } catch (Exception e) {
             log.error("Error changing user", e);
@@ -77,8 +78,8 @@ public class UserController {
         try {
             final User user = userRepository.findUserById(new UserId(userId));
             return ResponseEntity.ok().body(userToResponseEntity(user));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with mentioned id not found");
+        } catch (IllegalValueException e) {
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(e.getMessage());
         } catch (Exception e) {
             log.error("Error fetching user", e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -109,8 +110,8 @@ public class UserController {
         try {
             userRepository.deleteUser(new UserId(userId));
             return ResponseEntity.ok().build();
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with mentioned id not found");
+        } catch (IllegalValueException e) {
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(e.getMessage());
         } catch (Exception e) {
             log.error("Error deleting user", e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

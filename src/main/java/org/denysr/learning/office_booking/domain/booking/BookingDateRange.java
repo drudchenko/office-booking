@@ -1,7 +1,9 @@
 package org.denysr.learning.office_booking.domain.booking;
 
 import lombok.Value;
+import org.apache.commons.lang3.Validate;
 import org.denysr.learning.office_booking.domain.date.DateRange;
+import org.denysr.learning.office_booking.domain.validation.ValidatorWrapper;
 import org.springframework.util.Assert;
 
 import java.time.LocalDate;
@@ -12,7 +14,12 @@ public class BookingDateRange {
 
     public BookingDateRange(LocalDate startDate, LocalDate endDate) {
         dateRange = new DateRange(startDate, endDate);
-        Assert.isTrue(dateRange.hasBusinessDayInRange(), "There should be at least one business day in the range");
+        ValidatorWrapper.wrapValidators(
+                () -> Validate.isTrue(
+                        dateRange.hasBusinessDayInRange(),
+                        "There should be at least one business day in the range"
+                )
+        );
     }
 
     /**

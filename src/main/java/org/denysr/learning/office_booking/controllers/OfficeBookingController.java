@@ -7,6 +7,7 @@ import org.denysr.learning.office_booking.domain.booking.*;
 import org.denysr.learning.office_booking.domain.date.DateRange;
 import org.denysr.learning.office_booking.domain.user.User;
 import org.denysr.learning.office_booking.domain.user.UserId;
+import org.denysr.learning.office_booking.domain.validation.IllegalValueException;
 import org.denysr.learning.office_booking.infrastructure.rest.BookingResponseEntity;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -41,7 +42,7 @@ public class OfficeBookingController {
                     new BookingDateRange(startDate, endDate)
             );
             return ResponseEntity.status(HttpStatus.CREATED).body(bookingId);
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalValueException e) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(e.getMessage());
         } catch (Exception e) {
             log.error("Error processing booking creation", e);
@@ -63,8 +64,8 @@ public class OfficeBookingController {
                             .map(booking -> bookingToResponseEntity(booking, businessWeek))
                             .collect(Collectors.toList())
             );
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(e.getMessage());
+        } catch (IllegalValueException e) {
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(e.getMessage());
         } catch (Exception e) {
             log.error("Error during fetching bookings", e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -79,10 +80,8 @@ public class OfficeBookingController {
         try {
             bookingManagement.deleteBooking(new BookingId(bookingId));
             return ResponseEntity.ok().build();
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(e.getMessage());
-        } catch (IllegalStateException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Booking with mentioned id not found");
+        } catch (IllegalValueException e) {
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(e.getMessage());
         } catch (Exception e) {
             log.error("Error processing booking deletion", e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

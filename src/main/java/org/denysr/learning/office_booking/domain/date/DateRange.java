@@ -1,7 +1,8 @@
 package org.denysr.learning.office_booking.domain.date;
 
 import lombok.Value;
-import org.springframework.util.Assert;
+import org.apache.commons.lang3.Validate;
+import org.denysr.learning.office_booking.domain.validation.ValidatorWrapper;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -12,9 +13,11 @@ public class DateRange {
     LocalDate endDate;
 
     public DateRange(LocalDate startDate, LocalDate endDate) {
-        Assert.notNull(startDate, "Start date is required");
-        Assert.notNull(endDate, "End date is required");
-        Assert.isTrue(endDate.isAfter(startDate) || endDate.equals(startDate), "End date should be after start date");
+        ValidatorWrapper.wrapValidators(
+                () -> Validate.notNull(startDate, "Start date is required"),
+                () -> Validate.notNull(endDate, "End date is required"),
+                () -> Validate.isTrue(!startDate.isAfter(endDate), "End date should be after start date")
+        );
         this.startDate = startDate;
         this.endDate = endDate;
     }
