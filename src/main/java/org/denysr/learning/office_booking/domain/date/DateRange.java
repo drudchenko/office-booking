@@ -23,7 +23,7 @@ public class DateRange {
     }
 
     public boolean intersectsWith(DateRange other) {
-        return isDateInRange(other.startDate) || isDateInRange(other.endDate);
+        return isDateInRange(other.startDate) || isDateInRange(other.endDate) || containsCurrentRange(other);
     }
 
     public boolean hasBusinessDayInRange() {
@@ -38,5 +38,9 @@ public class DateRange {
 
     private boolean isDateInRange(LocalDate dateToTest) {
         return !dateToTest.isBefore(startDate) && !dateToTest.isAfter(endDate);
+    }
+
+    private boolean containsCurrentRange(DateRange other) {
+        return startDate.isAfter(other.getStartDate()) && endDate.isBefore(other.getEndDate());
     }
 }
