@@ -1,18 +1,27 @@
 package org.denysr.learning.office_booking.domain.booking;
 
-import org.denysr.learning.office_booking.domain.user.UserId;
 import lombok.Data;
-import lombok.NonNull;
+import org.apache.commons.lang3.Validate;
+import org.denysr.learning.office_booking.domain.user.UserId;
+import org.denysr.learning.office_booking.domain.validation.ValidatorWrapper;
 
 import java.util.Objects;
 
 @Data
-public class Booking {
+final public class Booking {
     private final BookingId bookingId;
-    @NonNull
     private final UserId userId;
-    @NonNull
     private final BookingDateRange bookingDateRange;
+
+    public Booking(BookingId bookingId, UserId userId, BookingDateRange bookingDateRange) {
+        ValidatorWrapper.wrapValidators(
+                () -> Validate.notNull(userId),
+                () -> Validate.notNull(bookingDateRange)
+        );
+        this.bookingId = bookingId;
+        this.userId = userId;
+        this.bookingDateRange = bookingDateRange;
+    }
 
     public boolean hasId() {
         return !Objects.isNull(bookingId);

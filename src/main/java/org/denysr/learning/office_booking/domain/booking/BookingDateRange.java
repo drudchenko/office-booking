@@ -38,7 +38,12 @@ public class BookingDateRange {
     }
 
     public DateRange getRangeForWeek(BusinessWeek businessWeek) {
-        Validate.isTrue(intersectsWith(businessWeek.getDateRange()), "The timeframe has no intersection with the week");
+        ValidatorWrapper.wrapValidators(
+                () -> Validate.isTrue(
+                        intersectsWith(businessWeek.getDateRange()),
+                        "The timeframe has no intersection with the week"
+                )
+        );
         LocalDate weekRangeStart = businessWeek.getBusinessWeekStart().isAfter(getStartDate()) ?
                 businessWeek.getBusinessWeekStart() : getStartDate();
         LocalDate weekRangeEnd = businessWeek.getBusinessWeekEnd().isBefore(getEndDate()) ?

@@ -1,5 +1,6 @@
 package org.denysr.learning.office_booking.domain.booking;
 
+import org.denysr.learning.office_booking.domain.date.DateRange;
 import org.denysr.learning.office_booking.domain.validation.IllegalValueException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -54,9 +55,31 @@ class BookingDateRangeTest {
         );
     }
 
+    @ParameterizedTest
+    @MethodSource("provideCorrectRangeWeekData")
+    void should_provide_correct_range_for_week(
+            LocalDate startDateParam,
+            LocalDate endDateParam,
+            BusinessWeek businessWeek,
+            LocalDate expectedRangeStart,
+            LocalDate expectedRangeEnd
+    ) {
+        BookingDateRange bookingDateRange = new BookingDateRange(startDateParam, endDateParam);
+        DateRange rangeWeek = bookingDateRange.getRangeForWeek(businessWeek);
+        assertAll(
+                () -> assertEquals(expectedRangeStart, rangeWeek.getStartDate()),
+                () -> assertEquals(expectedRangeEnd, rangeWeek.getEndDate())
+        );
+    }
+
     @Test
-    void should_provide_correct_range_for_week() {
-        // TODO: implement me
+    void should_fail_detect_week_range_for_wrong_week() {
+        BookingDateRange bookingDateRange = new BookingDateRange(
+                LocalDate.of(2020, 10, 10),
+                LocalDate.of(2020, 10, 15)
+        );
+        BusinessWeek businessWeek = new BusinessWeek(LocalDate.of(2020, 10, 1));
+        assertThrows(IllegalValueException.class, () -> bookingDateRange.getRangeForWeek(businessWeek));
     }
 
     private static Stream<Arguments> provideCorrectBookingDateRanges() {
@@ -113,6 +136,26 @@ class BookingDateRangeTest {
                 Arguments.of(
                         LocalDate.of(2000, 10, 21), LocalDate.of(2000, 10, 25),
                         LocalDate.of(2020, 10, 26), LocalDate.of(2020, 10, 30)
+                )
+        );
+    }
+
+    private static Stream<Arguments> provideCorrectRangeWeekData() {
+        return Stream.of(
+                Arguments.of(
+                        LocalDate.of(2020, 10, 21), LocalDate.of(2020, 11, 13),
+                        new BusinessWeek(LocalDate.of(2020, 10, 27)),
+                        LocalDate.of(2020, 10, 26), LocalDate.of(2020, 10, 30)
+                ),
+                Arguments.of(
+                        LocalDate.of(2020, 10, 28), LocalDate.of(2020, 11, 30),
+                        new BusinessWeek(LocalDate.of(2020, 10, 27)),
+                        LocalDate.of(2020, 10, 28), LocalDate.of(2020, 10, 30)
+                ),
+                Arguments.of(
+                        LocalDate.of(2020, 10, 26), LocalDate.of(2020, 10, 26),
+                        new BusinessWeek(LocalDate.of(2020, 10, 27)),
+                        LocalDate.of(2020, 10, 26), LocalDate.of(2020, 10, 26)
                 )
         );
     }
