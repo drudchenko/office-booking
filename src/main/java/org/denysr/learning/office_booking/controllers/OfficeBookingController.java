@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/office")
 @RequiredArgsConstructor
 @Log4j2
-public class OfficeBookingController {
+final public class OfficeBookingController {
     private final BookingManagement bookingManagement;
 
     @PostMapping("/booking")

@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.LocalDate;
 
 @Data
-public class BookingResponseEntity {
+final public class BookingResponseEntity {
     private final int bookingId;
     private final String userName;
     private final LocalDate startDate;

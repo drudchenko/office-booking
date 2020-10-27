@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 @Repository
-public class InMemoryUserRepository implements UserRepository {
+final public class InMemoryUserRepository implements UserRepository {
     private final ConcurrentMap<UserId, User> users = new ConcurrentHashMap<>();
 
     @Override

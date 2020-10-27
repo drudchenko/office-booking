@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 
 @Repository
-public class InMemoryBookingRepository implements BookingRepository {
+final public class InMemoryBookingRepository implements BookingRepository {
     /**
      * Of course there is the performance penalty, ideally some DB should be used instead
      */

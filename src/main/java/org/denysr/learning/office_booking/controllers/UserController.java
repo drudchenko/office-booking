@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/users")
 @RequiredArgsConstructor
 @Log4j2
-public class UserController {
+final public class UserController {
     private final UserRepository userRepository;
 
     @PostMapping("/user")
