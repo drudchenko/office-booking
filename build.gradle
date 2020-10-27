@@ -1,0 +1,37 @@
+plugins {
+    id 'org.springframework.boot' version '2.3.4.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+    id 'java'
+}
+
+group = 'org.denysr.learning-projects'
+version = '1.0.0-SNAPSHOT'
+description = 'Test project for office booking'
+sourceCompatibility = '11'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+
+    compile group: 'commons-validator', name: 'commons-validator', version: '1.7'
+    compile group: 'com.google.guava', name: 'guava', version: '30.0-jre'
+    compile group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.2.32'
+}
+
+test {
+    useJUnitPlatform()
+}
