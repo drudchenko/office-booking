@@ -28,7 +28,6 @@ dependencies {
     }
 
     compile group: 'commons-validator', name: 'commons-validator', version: '1.7'
-    compile group: 'com.google.guava', name: 'guava', version: '30.0-jre'
     compile group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.2.32'
 }
 
