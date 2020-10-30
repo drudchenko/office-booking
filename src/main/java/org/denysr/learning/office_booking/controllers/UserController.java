@@ -3,6 +3,7 @@ package org.denysr.learning.office_booking.controllers;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.denysr.learning.office_booking.domain.user.*;
+import org.denysr.learning.office_booking.domain.validation.EntityNotFoundException;
 import org.denysr.learning.office_booking.domain.validation.IllegalValueException;
 import org.denysr.learning.office_booking.infrastructure.rest.UserResponseEntity;
 import org.springframework.http.HttpStatus;
@@ -64,6 +65,8 @@ final public class UserController {
             return ResponseEntity.ok(userIdObject);
         } catch (IllegalValueException e) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(e.getMessage());
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
             log.error("Error changing user", e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -80,6 +83,8 @@ final public class UserController {
             return ResponseEntity.ok().body(userToResponseEntity(user));
         } catch (IllegalValueException e) {
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(e.getMessage());
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
             log.error("Error fetching user", e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -112,6 +117,8 @@ final public class UserController {
             return ResponseEntity.ok().build();
         } catch (IllegalValueException e) {
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(e.getMessage());
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
             log.error("Error deleting user", e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

@@ -7,6 +7,7 @@ import org.denysr.learning.office_booking.domain.booking.*;
 import org.denysr.learning.office_booking.domain.date.DateRange;
 import org.denysr.learning.office_booking.domain.user.User;
 import org.denysr.learning.office_booking.domain.user.UserId;
+import org.denysr.learning.office_booking.domain.validation.EntityNotFoundException;
 import org.denysr.learning.office_booking.domain.validation.IllegalValueException;
 import org.denysr.learning.office_booking.infrastructure.rest.BookingResponseEntity;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -82,6 +83,8 @@ final public class OfficeBookingController {
             return ResponseEntity.ok().build();
         } catch (IllegalValueException e) {
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(e.getMessage());
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
             log.error("Error processing booking deletion", e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
