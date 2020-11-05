@@ -11,7 +11,7 @@ public class BusinessWeek {
     DateRange dateRange;
 
     /**
-     * We're constructing the week from any
+     * We're constructing the week from any day
      */
     public BusinessWeek(LocalDate weekDay) {
         dateRange = new DateRange(weekDay.with(DayOfWeek.MONDAY), weekDay.with(DayOfWeek.FRIDAY));
