@@ -70,7 +70,7 @@ class UserControllerIT {
                 .params(params)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnprocessableEntity())
-                .andExpect(content().string("Invalid email provided"));
+                .andExpect(jsonPath("$.error", is("Invalid email provided")));
     }
 
     @Test
@@ -91,7 +91,7 @@ class UserControllerIT {
                 .params(params)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isInternalServerError())
-                .andExpect(content().string(""));
+                .andExpect(jsonPath("$.error", is("")));
     }
 
     @Test
@@ -134,7 +134,7 @@ class UserControllerIT {
                 .params(params)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnprocessableEntity())
-                .andExpect(content().string("Name length should be between 2 and 70"));
+                .andExpect(jsonPath("$.error", is("Name length should be between 2 and 70")));
     }
 
     @Test
@@ -158,7 +158,7 @@ class UserControllerIT {
                 .params(params)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string(errorMessage));
+                .andExpect(jsonPath("$.error", is(errorMessage)));
     }
 
     @Test
@@ -181,7 +181,7 @@ class UserControllerIT {
                 .params(params)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isInternalServerError())
-                .andExpect(content().string(""));
+                .andExpect(jsonPath("$.error", is("")));
     }
 
     @Test
@@ -222,7 +222,7 @@ class UserControllerIT {
                 .params(params)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string(errorMessage));
+                .andExpect(jsonPath("$.error", is(errorMessage)));
     }
 
     @Test
@@ -236,7 +236,7 @@ class UserControllerIT {
                 .params(params)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotAcceptable())
-                .andExpect(content().string("User id should be above 0."));
+                .andExpect(jsonPath("$.error", is("User id should be above 0.")));
     }
 
     @Test
@@ -252,7 +252,7 @@ class UserControllerIT {
                 .params(params)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isInternalServerError())
-                .andExpect(content().string(""));
+                .andExpect(jsonPath("$.error", is("")));
     }
 
     @Test
@@ -293,7 +293,7 @@ class UserControllerIT {
         mvc.perform(get("/users/users")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isInternalServerError())
-                .andExpect(content().string(""));
+                .andExpect(jsonPath("$.error", is("")));
     }
 
     @Test
@@ -337,7 +337,7 @@ class UserControllerIT {
                 .params(params)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string(errorMessage));
+                .andExpect(jsonPath("$.error", is(errorMessage)));
     }
 
     @Test
@@ -353,6 +353,6 @@ class UserControllerIT {
                 .params(params)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isInternalServerError())
-                .andExpect(content().string(""));
+                .andExpect(jsonPath("$.error", is("")));
     }
 }
