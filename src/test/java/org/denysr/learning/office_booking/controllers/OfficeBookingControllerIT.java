@@ -80,7 +80,7 @@ class OfficeBookingControllerIT {
                 .params(params)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnprocessableEntity())
-                .andExpect(content().string("End date should be after start date"));
+                .andExpect(jsonPath("$.error", is("End date should be after start date")));
     }
 
     @Test
@@ -104,7 +104,7 @@ class OfficeBookingControllerIT {
                 .params(params)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isInternalServerError())
-                .andExpect(content().string(""));
+                .andExpect(jsonPath("$.error", is("")));
     }
 
     @Test
@@ -164,7 +164,7 @@ class OfficeBookingControllerIT {
         mvc.perform(get("/office/bookings/" + businessDayParam)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isInternalServerError())
-                .andExpect(content().string(""));
+                .andExpect(jsonPath("$.error", is("")));
     }
 
     @Test
@@ -208,7 +208,7 @@ class OfficeBookingControllerIT {
                 .params(params)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string(errorMessage));
+                .andExpect(jsonPath("$.error", is(errorMessage)));
     }
 
     @Test
@@ -224,6 +224,6 @@ class OfficeBookingControllerIT {
                 .params(params)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isInternalServerError())
-                .andExpect(content().string(""));
+                .andExpect(jsonPath("$.error", is("")));
     }
 }
