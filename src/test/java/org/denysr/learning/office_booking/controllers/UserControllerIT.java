@@ -21,7 +21,8 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith({SpringExtension.class, MockitoExtension.class})
 @WebMvcTest(UserController.class)
@@ -195,11 +196,7 @@ class UserControllerIT {
 
         when(userRepository.findUserById(new UserId(userId))).thenReturn(expectedUser);
 
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("userId", Integer.toString(userId));
-
-        mvc.perform(get("/users/user")
-                .params(params)
+        mvc.perform(get("/users/user/" + userId)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.userId", is(userId)))
@@ -215,11 +212,7 @@ class UserControllerIT {
 
         when(userRepository.findUserById(new UserId(userId))).thenThrow(new EntityNotFoundException(errorMessage));
 
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("userId", Integer.toString(userId));
-
-        mvc.perform(get("/users/user")
-                .params(params)
+        mvc.perform(get("/users/user/" + userId)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.error", is(errorMessage)));
@@ -229,11 +222,7 @@ class UserControllerIT {
     void whenGetUser_givenWrongId_shouldReturnNotAcceptableCode() throws Exception {
         int userId = -1;
 
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("userId", Integer.toString(userId));
-
-        mvc.perform(get("/users/user")
-                .params(params)
+        mvc.perform(get("/users/user/" + userId)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotAcceptable())
                 .andExpect(jsonPath("$.error", is("User id should be above 0.")));
@@ -245,11 +234,7 @@ class UserControllerIT {
 
         when(userRepository.findUserById(new UserId(userId))).thenThrow(new RuntimeException("dummy err msg"));
 
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("userId", Integer.toString(userId));
-
-        mvc.perform(get("/users/user")
-                .params(params)
+        mvc.perform(get("/users/user/" + userId)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isInternalServerError())
                 .andExpect(jsonPath("$.error", is("")));

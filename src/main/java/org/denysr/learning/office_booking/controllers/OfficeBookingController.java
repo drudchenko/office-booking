@@ -1,5 +1,7 @@
 package org.denysr.learning.office_booking.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.tuple.Pair;
@@ -27,14 +29,15 @@ import java.util.stream.Collectors;
 final public class OfficeBookingController {
     private final BookingManagement bookingManagement;
 
-    @PostMapping("/booking")
+    @Operation(summary = "Book office", description = "Book office for mentioned user for desired timeframe")
+    @PostMapping(value = "/booking", consumes = {"application/json"})
     public ResponseEntity<?> createBooking(
-            @RequestParam
+            @Parameter(description = "User id", required = true, example = "3")
             int userId,
-            @RequestParam
+            @Parameter(description = "Booking start date", required = true, example = "2020-01-01")
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
             LocalDate startDate,
-            @RequestParam
+            @Parameter(description = "Booking end date", required = true, example = "2020-01-06")
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
             LocalDate endDate
     ) {
@@ -52,6 +55,8 @@ final public class OfficeBookingController {
         }
     }
 
+    @Operation(summary = "Get office bookings for the week",
+            description = "Get office bookings for the week, defined by the day of the input parameter")
     @GetMapping("/bookings/{businessDay}")
     public ResponseEntity<?> getBookings(
             @PathVariable
@@ -74,9 +79,10 @@ final public class OfficeBookingController {
         }
     }
 
-    @DeleteMapping("/booking")
+    @Operation(summary = "Delete booking", description = "Delete booking by id")
+    @DeleteMapping(value = "/booking", consumes = {"application/json"})
     public ResponseEntity<?> deleteBooking(
-            @RequestParam
+            @Parameter(description = "Booking id", required = true, example = "3")
             int bookingId
     ) {
         try {

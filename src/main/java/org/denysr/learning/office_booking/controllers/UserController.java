@@ -120,9 +120,9 @@ final public class UserController {
             @ApiResponse(responseCode = "500", description = "Unknown server error",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @GetMapping("/user")
+    @GetMapping("/user/{userId}")
     public ResponseEntity<?> getUser(
-            @RequestParam
+            @PathVariable
             int userId
     ) {
         try {
