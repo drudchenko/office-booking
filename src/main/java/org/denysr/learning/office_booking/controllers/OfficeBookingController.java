@@ -2,6 +2,10 @@ package org.denysr.learning.office_booking.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.tuple.Pair;
@@ -30,6 +34,17 @@ final public class OfficeBookingController {
     private final BookingManagement bookingManagement;
 
     @Operation(summary = "Book office", description = "Book office for mentioned user for desired timeframe")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "User created", content = @Content),
+            @ApiResponse(
+                    responseCode = "422",
+                    description = "Invalid parameter(s) supplied",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
+            ),
+            @ApiResponse(responseCode = "500", description = "Unknown server error",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+
+    })
     @PostMapping(value = "/booking", consumes = {"application/json"})
     public ResponseEntity<?> createBooking(
             @Parameter(description = "User id", required = true, example = "3")
@@ -57,6 +72,16 @@ final public class OfficeBookingController {
 
     @Operation(summary = "Get office bookings for the week",
             description = "Get office bookings for the week, defined by the day of the input parameter")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "List of bookings for the week", content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = BookingResponseEntity[].class)
+            )),
+            @ApiResponse(responseCode = "500", description = "Unknown server error",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))
+            )
+    })
     @GetMapping("/bookings/{businessDay}")
     public ResponseEntity<?> getBookings(
             @PathVariable
@@ -80,6 +105,16 @@ final public class OfficeBookingController {
     }
 
     @Operation(summary = "Delete booking", description = "Delete booking by id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Booking deleted", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Booking with mentioned id not found",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "406", description = "Invalid parameter supplied",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "Unknown server error",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+
+    })
     @DeleteMapping(value = "/booking", consumes = {"application/json"})
     public ResponseEntity<?> deleteBooking(
             @Parameter(description = "Booking id", required = true, example = "3")
