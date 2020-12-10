@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Data
-public class UserRestDto {
+public final class UserRestDto {
 
     @Email
     @NotBlank

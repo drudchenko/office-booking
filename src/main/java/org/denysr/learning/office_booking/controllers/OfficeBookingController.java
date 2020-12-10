@@ -1,7 +1,6 @@
 package org.denysr.learning.office_booking.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -17,6 +16,7 @@ import org.denysr.learning.office_booking.domain.validation.EntityNotFoundExcept
 import org.denysr.learning.office_booking.domain.validation.IllegalValueException;
 import org.denysr.learning.office_booking.infrastructure.rest.BookingResponseEntity;
 import org.denysr.learning.office_booking.infrastructure.rest.ErrorResponse;
+import org.denysr.learning.office_booking.infrastructure.rest.OfficeBookingRestDto;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,19 +46,13 @@ final public class OfficeBookingController {
     })
     @PostMapping(value = "/booking", consumes = {"application/json"})
     public ResponseEntity<?> createBooking(
-            @Parameter(description = "User id", required = true, example = "3")
-            int userId,
-            @Parameter(description = "Booking start date", required = true, example = "2020-01-01")
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-            LocalDate startDate,
-            @Parameter(description = "Booking end date", required = true, example = "2020-01-06")
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-            LocalDate endDate
+            @RequestBody
+            OfficeBookingRestDto officeBookingDto
     ) {
         try {
             BookingId bookingId = bookingManagement.insertBooking(
-                    new UserId(userId),
-                    new BookingDateRange(startDate, endDate)
+                    new UserId(officeBookingDto.getUserId()),
+                    new BookingDateRange(officeBookingDto.getStartDate(), officeBookingDto.getEndDate())
             );
             return ResponseEntity.status(HttpStatus.CREATED).body(bookingId);
         } catch (IllegalValueException e) {
@@ -113,9 +107,9 @@ final public class OfficeBookingController {
             @ApiResponse(responseCode = "500", description = "Unknown server error",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @DeleteMapping(value = "/booking", consumes = {"application/json"})
+    @DeleteMapping(value = "/booking/{bookingId}")
     public ResponseEntity<?> deleteBooking(
-            @Parameter(description = "Booking id", required = true, example = "3")
+            @PathVariable
             int bookingId
     ) {
         try {

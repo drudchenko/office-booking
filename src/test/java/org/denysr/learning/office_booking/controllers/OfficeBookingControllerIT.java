@@ -1,5 +1,6 @@
 package org.denysr.learning.office_booking.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.tuple.Pair;
 import org.denysr.learning.office_booking.domain.booking.*;
 import org.denysr.learning.office_booking.domain.user.User;
@@ -16,19 +17,20 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith({SpringExtension.class, MockitoExtension.class})
 @WebMvcTest(OfficeBookingController.class)
@@ -38,6 +40,7 @@ class OfficeBookingControllerIT {
     private MockMvc mvc;
     @MockBean
     private BookingManagement bookingManagement;
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
     void whenCreateBooking_givenCorrectParams_shouldReturnBookingId() throws Exception {
@@ -52,13 +55,13 @@ class OfficeBookingControllerIT {
         when(bookingManagement.insertBooking(expectedUserId, expectedBookingDateRange))
                 .thenReturn(new BookingId(bookingId));
 
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("userId", userId);
-        params.add("startDate", startDate);
-        params.add("endDate", endDate);
+        Map<String, String> params = new HashMap<>();
+        params.put("userId", userId);
+        params.put("startDate", startDate);
+        params.put("endDate", endDate);
 
         mvc.perform(post("/office/booking")
-                .params(params)
+                .content(objectMapper.writeValueAsString(params))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.bookingId", is(bookingId)));
@@ -69,15 +72,14 @@ class OfficeBookingControllerIT {
         String userId = "6";
         String startDate = "2020-10-09";
         String endDate = "2020-10-08";
-        LocalDate localDate = LocalDate.of(2020, 10, 9);
 
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("userId", userId);
-        params.add("startDate", startDate);
-        params.add("endDate", endDate);
+        Map<String, String> params = new HashMap<>();
+        params.put("userId", userId);
+        params.put("startDate", startDate);
+        params.put("endDate", endDate);
 
         mvc.perform(post("/office/booking")
-                .params(params)
+                .content(objectMapper.writeValueAsString(params))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(jsonPath("$.error", is("End date should be after start date")));
@@ -95,13 +97,13 @@ class OfficeBookingControllerIT {
         when(bookingManagement.insertBooking(expectedUserId, expectedBookingDateRange))
                 .thenThrow(new RuntimeException("some error message"));
 
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("userId", userId);
-        params.add("startDate", startDate);
-        params.add("endDate", endDate);
+        Map<String, String> params = new HashMap<>();
+        params.put("userId", userId);
+        params.put("startDate", startDate);
+        params.put("endDate", endDate);
 
         mvc.perform(post("/office/booking")
-                .params(params)
+                .content(objectMapper.writeValueAsString(params))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isInternalServerError())
                 .andExpect(jsonPath("$.error", is("")));
@@ -171,11 +173,7 @@ class OfficeBookingControllerIT {
     void whenDeleteBooking_givenCorrectParam_shouldReturnSuccessStatus() throws Exception {
         int bookingId = 10;
 
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("bookingId", Integer.toString(bookingId));
-
-        mvc.perform(delete("/office/booking")
-                .params(params)
+        mvc.perform(delete("/office/booking/" + bookingId)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
@@ -184,11 +182,7 @@ class OfficeBookingControllerIT {
     void whenDeleteBooking_givenIncorrectParam_shouldReturnNotAcceptableStatus() throws Exception {
         int bookingId = 0;
 
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("bookingId", Integer.toString(bookingId));
-
-        mvc.perform(delete("/office/booking")
-                .params(params)
+        mvc.perform(delete("/office/booking/" + bookingId)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotAcceptable());
     }
@@ -201,11 +195,7 @@ class OfficeBookingControllerIT {
         doThrow(new EntityNotFoundException(errorMessage))
                 .when(bookingManagement).deleteBooking(new BookingId(bookingId));
 
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("bookingId", Integer.toString(bookingId));
-
-        mvc.perform(delete("/office/booking")
-                .params(params)
+        mvc.perform(delete("/office/booking/" + bookingId)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.error", is(errorMessage)));
@@ -217,11 +207,7 @@ class OfficeBookingControllerIT {
 
         doThrow(new RuntimeException("Spooky error")).when(bookingManagement).deleteBooking(new BookingId(bookingId));
 
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("bookingId", Integer.toString(bookingId));
-
-        mvc.perform(delete("/office/booking")
-                .params(params)
+        mvc.perform(delete("/office/booking/" + bookingId)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isInternalServerError())
                 .andExpect(jsonPath("$.error", is("")));
