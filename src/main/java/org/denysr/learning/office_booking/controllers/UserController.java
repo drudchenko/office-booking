@@ -1,7 +1,6 @@
 package org.denysr.learning.office_booking.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -13,11 +12,11 @@ import org.denysr.learning.office_booking.domain.validation.EntityNotFoundExcept
 import org.denysr.learning.office_booking.domain.validation.IllegalValueException;
 import org.denysr.learning.office_booking.infrastructure.rest.ErrorResponse;
 import org.denysr.learning.office_booking.infrastructure.rest.UserResponseEntity;
+import org.denysr.learning.office_booking.infrastructure.rest.UserRestDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.Email;
 import java.util.stream.Collectors;
 
 @RestController
@@ -41,19 +40,14 @@ final public class UserController {
     })
     @PostMapping(value = "/user", consumes = {"application/json"})
     public ResponseEntity<?> createUser(
-            @Parameter(description = "Email of the user", required = true, example = "john.doe@example.com")
-            @Email
-            final String email,
-            @Parameter(description = "User's first name", required = true, example = "John")
-            final String firstName,
-            @Parameter(description = "User's surname", required = true, example = "Doe")
-            final String secondName
+            @RequestBody
+            UserRestDto userDto
     ) {
         try {
             final UserId userId = userRepository.saveUser(new User(
                     null,
-                    new UserEmail(email),
-                    new UserName(firstName, secondName)
+                    new UserEmail(userDto.getEmail()),
+                    new UserName(userDto.getFirstName(), userDto.getSecondName())
             ));
             return ResponseEntity.status(HttpStatus.CREATED).body(userId);
         } catch (IllegalValueException e) {
@@ -78,23 +72,18 @@ final public class UserController {
             @ApiResponse(responseCode = "500", description = "Unknown server error",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @PutMapping(value = "/user", consumes = {"application/json"})
+    @PutMapping(value = "/user/{userId}", consumes = {"application/json"})
     public ResponseEntity<?> changeUser(
-            @Parameter(description = "User id", required = true, example = "3")
+            @PathVariable
             final int userId,
-            @Parameter(description = "Email of the user", required = true, example = "john.doe@example.com")
-            @Email
-            final String email,
-            @Parameter(description = "User's first name", required = true, example = "John")
-            final String firstName,
-            @Parameter(description = "User's surname", required = true, example = "Doe")
-            final String secondName
+            @RequestBody
+            UserRestDto userDto
     ) {
         try {
             final UserId userIdObject = userRepository.saveUser(new User(
                     new UserId(userId),
-                    new UserEmail(email),
-                    new UserName(firstName, secondName)
+                    new UserEmail(userDto.getEmail()),
+                    new UserName(userDto.getFirstName(), userDto.getSecondName())
             ));
             return ResponseEntity.ok(userIdObject);
         } catch (IllegalValueException e) {
@@ -173,9 +162,9 @@ final public class UserController {
             @ApiResponse(responseCode = "500", description = "Unknown server error",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @DeleteMapping(value = "/user", consumes = {"application/json"})
+    @DeleteMapping(value = "/user/{userId}")
     public ResponseEntity<?> deleteUser(
-            @Parameter(description = "User id", required = true, example = "3")
+            @PathVariable
             int userId
     ) {
         try {

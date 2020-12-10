@@ -43,7 +43,6 @@ final public class OfficeBookingController {
             ),
             @ApiResponse(responseCode = "500", description = "Unknown server error",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
-
     })
     @PostMapping(value = "/booking", consumes = {"application/json"})
     public ResponseEntity<?> createBooking(
@@ -113,7 +112,6 @@ final public class OfficeBookingController {
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "Unknown server error",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
-
     })
     @DeleteMapping(value = "/booking", consumes = {"application/json"})
     public ResponseEntity<?> deleteBooking(

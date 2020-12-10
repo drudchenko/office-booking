@@ -1,7 +1,9 @@
 package org.denysr.learning.office_booking.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.denysr.learning.office_booking.domain.user.*;
 import org.denysr.learning.office_booking.domain.validation.EntityNotFoundException;
+import org.denysr.learning.office_booking.infrastructure.rest.UserRestDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -11,8 +13,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
 import java.util.Arrays;
 
@@ -32,6 +32,7 @@ class UserControllerIT {
     private MockMvc mvc;
     @MockBean
     private UserRepository userRepository;
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
     void whenCreateUser_givenCorrectParams_shouldReturnUserId() throws Exception {
@@ -44,14 +45,11 @@ class UserControllerIT {
 
         when(userRepository.saveUser(expectedUser)).thenReturn(new UserId(expectedUserId));
 
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("email", email);
-        params.add("firstName", firstName);
-        params.add("secondName", secondName);
+        UserRestDto userRequest = new UserRestDto(email, firstName, secondName);
 
         mvc.perform(post("/users/user")
-                .params(params)
-                .contentType(MediaType.APPLICATION_JSON))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(userRequest)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.userId", is(expectedUserId)));
     }
@@ -62,14 +60,11 @@ class UserControllerIT {
         String firstName = "John";
         String secondName = "Doe";
 
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("email", email);
-        params.add("firstName", firstName);
-        params.add("secondName", secondName);
+        UserRestDto userRequest = new UserRestDto(email, firstName, secondName);
 
         mvc.perform(post("/users/user")
-                .params(params)
-                .contentType(MediaType.APPLICATION_JSON))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(userRequest)))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(jsonPath("$.error", is("Invalid email provided")));
     }
@@ -83,14 +78,11 @@ class UserControllerIT {
 
         when(userRepository.saveUser(expectedUser)).thenThrow(new RuntimeException("Very strange error!"));
 
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("email", email);
-        params.add("firstName", firstName);
-        params.add("secondName", secondName);
+        UserRestDto userRequest = new UserRestDto(email, firstName, secondName);
 
         mvc.perform(post("/users/user")
-                .params(params)
-                .contentType(MediaType.APPLICATION_JSON))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(userRequest)))
                 .andExpect(status().isInternalServerError())
                 .andExpect(jsonPath("$.error", is("")));
     }
@@ -105,15 +97,11 @@ class UserControllerIT {
         User expectedUser = new User(new UserId(userId), new UserEmail(email), new UserName(firstName, secondName));
         when(userRepository.saveUser(expectedUser)).thenReturn(new UserId(userId));
 
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("userId", Integer.toString(userId));
-        params.add("email", email);
-        params.add("firstName", firstName);
-        params.add("secondName", secondName);
+        UserRestDto userRequest = new UserRestDto(email, firstName, secondName);
 
-        mvc.perform(put("/users/user")
-                .params(params)
-                .contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(put("/users/user/" + userId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(userRequest)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.userId", is(userId)));
     }
@@ -125,15 +113,11 @@ class UserControllerIT {
         String firstName = "J";
         String secondName = "Doe";
 
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("userId", Integer.toString(userId));
-        params.add("email", email);
-        params.add("firstName", firstName);
-        params.add("secondName", secondName);
+        UserRestDto userRequest = new UserRestDto(email, firstName, secondName);
 
-        mvc.perform(put("/users/user")
-                .params(params)
-                .contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(put("/users/user/" + userId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(userRequest)))
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(jsonPath("$.error", is("Name length should be between 2 and 70")));
     }
@@ -149,15 +133,11 @@ class UserControllerIT {
         User expectedUser = new User(new UserId(userId), new UserEmail(email), new UserName(firstName, secondName));
         when(userRepository.saveUser(expectedUser)).thenThrow(new EntityNotFoundException(errorMessage));
 
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("userId", Integer.toString(userId));
-        params.add("email", email);
-        params.add("firstName", firstName);
-        params.add("secondName", secondName);
+        UserRestDto userRequest = new UserRestDto(email, firstName, secondName);
 
-        mvc.perform(put("/users/user")
-                .params(params)
-                .contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(put("/users/user/" + userId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(userRequest)))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.error", is(errorMessage)));
     }
@@ -172,15 +152,11 @@ class UserControllerIT {
         User expectedUser = new User(new UserId(userId), new UserEmail(email), new UserName(firstName, secondName));
         when(userRepository.saveUser(expectedUser)).thenThrow(new RuntimeException("test message"));
 
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("userId", Integer.toString(userId));
-        params.add("email", email);
-        params.add("firstName", firstName);
-        params.add("secondName", secondName);
+        UserRestDto userRequest = new UserRestDto(email, firstName, secondName);
 
-        mvc.perform(put("/users/user")
-                .params(params)
-                .contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(put("/users/user/" + userId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(userRequest)))
                 .andExpect(status().isInternalServerError())
                 .andExpect(jsonPath("$.error", is("")));
     }
@@ -285,12 +261,7 @@ class UserControllerIT {
     void whenDeleteUser_givenCorrectParam_shouldReturnSuccessStatus() throws Exception {
         int userId = 10;
 
-
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("userId", Integer.toString(userId));
-
-        mvc.perform(delete("/users/user")
-                .params(params)
+        mvc.perform(delete("/users/user/" + userId)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
@@ -299,11 +270,7 @@ class UserControllerIT {
     void whenDeleteUser_givenIncorrectParam_shouldReturnNotAcceptableStatus() throws Exception {
         int userId = 0;
 
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("userId", Integer.toString(userId));
-
-        mvc.perform(delete("/users/user")
-                .params(params)
+        mvc.perform(delete("/users/user/" + userId)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotAcceptable());
     }
@@ -315,11 +282,7 @@ class UserControllerIT {
 
         doThrow(new EntityNotFoundException(errorMessage)).when(userRepository).deleteUser(new UserId(userId));
 
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("userId", Integer.toString(userId));
-
-        mvc.perform(delete("/users/user")
-                .params(params)
+        mvc.perform(delete("/users/user/" + userId)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.error", is(errorMessage)));
@@ -331,11 +294,7 @@ class UserControllerIT {
 
         doThrow(new RuntimeException("Spooky error")).when(userRepository).deleteUser(new UserId(userId));
 
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("userId", Integer.toString(userId));
-
-        mvc.perform(delete("/users/user")
-                .params(params)
+        mvc.perform(delete("/users/user/" + userId)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isInternalServerError())
                 .andExpect(jsonPath("$.error", is("")));

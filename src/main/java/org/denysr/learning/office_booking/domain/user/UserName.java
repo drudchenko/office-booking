@@ -6,8 +6,8 @@ import org.denysr.learning.office_booking.domain.validation.ValidatorWrapper;
 
 @Value
 public class UserName {
-    private static final int MIN_USER_NAME_LENGTH = 2;
-    private static final int MAX_USER_NAME_LENGTH = 70;
+    public static final int MIN_USER_NAME_LENGTH = 2;
+    public static final int MAX_USER_NAME_LENGTH = 70;
 
     String firstName;
     String secondName;
