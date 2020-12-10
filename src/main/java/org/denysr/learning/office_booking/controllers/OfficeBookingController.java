@@ -79,6 +79,11 @@ final public class OfficeBookingController {
     public ResponseEntity<?> getBookings(
             @PathVariable
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            @Schema(
+                    description = "Business day, which represents the week for which we're retrieving bookings",
+                    required = true,
+                    example = "2020-12-14"
+            )
             LocalDate businessDay
     ) {
         try {
@@ -110,6 +115,7 @@ final public class OfficeBookingController {
     @DeleteMapping(value = "/booking/{bookingId}")
     public ResponseEntity<?> deleteBooking(
             @PathVariable
+            @Schema(description = "Id of the booking to delete", required = true, example = "20")
             int bookingId
     ) {
         try {

@@ -75,6 +75,7 @@ final public class UserController {
     @PutMapping(value = "/user/{userId}", consumes = {"application/json"})
     public ResponseEntity<?> changeUser(
             @PathVariable
+            @Schema(description = "Id of the existing user, which is being changed", required = true, example = "4")
             final int userId,
             @RequestBody
             UserRestDto userDto
@@ -112,6 +113,7 @@ final public class UserController {
     @GetMapping("/user/{userId}")
     public ResponseEntity<?> getUser(
             @PathVariable
+            @Schema(description = "Id of the user to retrieve", required = true, example = "5")
             int userId
     ) {
         try {
@@ -165,6 +167,7 @@ final public class UserController {
     @DeleteMapping(value = "/user/{userId}")
     public ResponseEntity<?> deleteUser(
             @PathVariable
+            @Schema(description = "Id of the existing user, which should be deleted", required = true, example = "4")
             int userId
     ) {
         try {
