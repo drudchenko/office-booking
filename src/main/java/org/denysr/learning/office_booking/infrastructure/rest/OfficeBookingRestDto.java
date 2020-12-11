@@ -7,6 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDate;
 
 @Data
+@Schema(name = "Office booking request")
 public final class OfficeBookingRestDto {
     @Schema(description = "Id of the existing user", required = true, example = "3")
     private final int userId;

@@ -9,6 +9,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Data
+@Schema(name = "User request")
 public final class UserRestDto {
 
     @Email

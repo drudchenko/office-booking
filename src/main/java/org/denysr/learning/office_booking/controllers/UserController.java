@@ -1,6 +1,7 @@
 package org.denysr.learning.office_booking.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -29,7 +30,8 @@ final public class UserController {
     @Operation(summary = "Create user", description = "Creating a new user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "User successfully created",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserId.class))),
+                    content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = UserId.class))),
             @ApiResponse(
                     responseCode = "422",
                     description = "Invalid parameter(s) supplied",
@@ -133,7 +135,7 @@ final public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "List of users", content = @Content(
                     mediaType = "application/json",
-                    schema = @Schema(implementation = UserResponseEntity[].class)
+                    array = @ArraySchema(schema = @Schema(implementation = UserResponseEntity.class))
             )),
             @ApiResponse(responseCode = "500", description = "Unknown server error",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))

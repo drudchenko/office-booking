@@ -1,6 +1,7 @@
 package org.denysr.learning.office_booking.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -68,7 +69,7 @@ final public class OfficeBookingController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "List of bookings for the week", content = @Content(
                     mediaType = "application/json",
-                    schema = @Schema(implementation = BookingResponseEntity[].class)
+                    array = @ArraySchema(schema = @Schema(implementation = BookingResponseEntity.class))
             )),
             @ApiResponse(responseCode = "500", description = "Unknown server error",
                     content = @Content(mediaType = "application/json",
