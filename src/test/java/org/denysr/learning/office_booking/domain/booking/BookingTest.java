@@ -68,7 +68,7 @@ class BookingTest {
                 LocalDate.of(2020, 2, 2)
         );
 
-        Booking booking = new Booking(null, userId, bookingDateRange).withBookingId(bookingId);
+        Booking booking = new Booking(bookingId, userId, bookingDateRange);
 
         assertAll(
                 () -> assertTrue(booking.hasId()),

@@ -64,7 +64,7 @@ final public class InMemoryBookingRepository implements BookingRepository {
             BookingId maxBookingId = Collections.max(bookings.keySet());
             newBookingId = new BookingId(maxBookingId.getBookingId() + 1);
         }
-        bookings.put(newBookingId, booking.withBookingId(newBookingId));
+        bookings.put(newBookingId, booking.toBuilder().withBookingId(newBookingId).build());
         return newBookingId;
     }
 }

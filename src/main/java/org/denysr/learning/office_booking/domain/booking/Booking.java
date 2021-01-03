@@ -1,5 +1,6 @@
 package org.denysr.learning.office_booking.domain.booking;
 
+import lombok.Builder;
 import lombok.Data;
 import org.apache.commons.lang3.Validate;
 import org.denysr.learning.office_booking.domain.user.UserId;
@@ -8,6 +9,7 @@ import org.denysr.learning.office_booking.domain.validation.ValidatorWrapper;
 import java.util.Objects;
 
 @Data
+@Builder(toBuilder = true, setterPrefix = "with")
 final public class Booking {
     private final BookingId bookingId;
     private final UserId userId;
@@ -25,9 +27,5 @@ final public class Booking {
 
     public boolean hasId() {
         return !Objects.isNull(bookingId);
-    }
-
-    public Booking withBookingId(BookingId bookingId) {
-        return new Booking(bookingId, userId, bookingDateRange);
     }
 }

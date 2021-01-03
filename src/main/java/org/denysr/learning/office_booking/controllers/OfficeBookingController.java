@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.tuple.Pair;
 import org.denysr.learning.office_booking.domain.booking.*;
-import org.denysr.learning.office_booking.domain.date.DateRange;
 import org.denysr.learning.office_booking.domain.user.User;
 import org.denysr.learning.office_booking.domain.user.UserId;
 import org.denysr.learning.office_booking.domain.validation.EntityNotFoundException;
@@ -92,7 +91,7 @@ final public class OfficeBookingController {
             List<Pair<Booking, User>> bookings = bookingManagement.fetchAllBookingsForWeek(businessWeek);
             return ResponseEntity.ok().body(
                     bookings.stream()
-                            .map(booking -> bookingToResponseEntity(booking, businessWeek))
+                            .map(this::bookingToResponseEntity)
                             .collect(Collectors.toList())
             );
         } catch (IllegalValueException e) {
@@ -132,13 +131,13 @@ final public class OfficeBookingController {
         }
     }
 
-    private BookingResponseEntity bookingToResponseEntity(Pair<Booking, User> booking, BusinessWeek businessWeek) {
-        final DateRange timeframeForWeek = booking.getLeft().getBookingDateRange().getRangeForWeek(businessWeek);
+    private BookingResponseEntity bookingToResponseEntity(Pair<Booking, User> bookingPair) {
+        final Booking booking = bookingPair.getLeft();
         return new BookingResponseEntity(
-                booking.getLeft().getBookingId().getBookingId(),
-                booking.getRight().getUserName().getFullName(),
-                timeframeForWeek.getStartDate(),
-                timeframeForWeek.getEndDate()
+                booking.getBookingId().getBookingId(),
+                bookingPair.getRight().getUserName().getFullName(),
+                booking.getBookingDateRange().getStartDate(),
+                booking.getBookingDateRange().getEndDate()
         );
     }
 }

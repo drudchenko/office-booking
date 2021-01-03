@@ -3,6 +3,7 @@ package org.denysr.learning.office_booking.domain.booking;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import org.denysr.learning.office_booking.domain.date.DateRange;
 import org.denysr.learning.office_booking.domain.user.User;
 import org.denysr.learning.office_booking.domain.user.UserId;
 import org.denysr.learning.office_booking.domain.user.UserRepository;
@@ -33,11 +34,19 @@ final public class BookingManagement {
     public List<Pair<Booking, User>> fetchAllBookingsForWeek(BusinessWeek businessWeek) {
         return bookingRepository.getBookingsForWeek(businessWeek)
                 .stream()
+                .map(booking -> withWeek(booking, businessWeek))
                 .map(this::fetchUserForBooking)
                 .collect(Collectors.toList());
     }
 
     private Pair<Booking, User> fetchUserForBooking(Booking booking) {
         return new ImmutablePair<>(booking, userRepository.findUserById(booking.getUserId()));
+    }
+
+    private Booking withWeek(Booking booking, BusinessWeek businessWeek) {
+        final DateRange weekRange = booking.getBookingDateRange().getRangeForWeek(businessWeek);
+        return booking.toBuilder()
+                .withBookingDateRange(new BookingDateRange(weekRange))
+                .build();
     }
 }

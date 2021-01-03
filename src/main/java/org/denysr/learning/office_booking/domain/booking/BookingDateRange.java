@@ -11,14 +11,18 @@ import java.time.LocalDate;
 public class BookingDateRange {
     DateRange dateRange;
 
-    public BookingDateRange(LocalDate startDate, LocalDate endDate) {
-        dateRange = new DateRange(startDate, endDate);
+    public BookingDateRange(DateRange dateRange) {
         ValidatorWrapper.wrapValidators(
                 () -> Validate.isTrue(
                         dateRange.hasBusinessDayInRange(),
                         "There should be at least one business day in the range"
                 )
         );
+        this.dateRange = dateRange;
+    }
+
+    public BookingDateRange(LocalDate startDate, LocalDate endDate) {
+        this(new DateRange(startDate, endDate));
     }
 
     /**
