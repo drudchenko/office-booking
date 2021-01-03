@@ -8,12 +8,17 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.denysr.learning.office_booking.domain.user.*;
+import org.denysr.learning.office_booking.domain.user.User;
+import org.denysr.learning.office_booking.domain.user.User.UserBuilder;
+import org.denysr.learning.office_booking.domain.user.UserId;
+import org.denysr.learning.office_booking.domain.user.UserRepository;
 import org.denysr.learning.office_booking.domain.validation.EntityNotFoundException;
 import org.denysr.learning.office_booking.domain.validation.IllegalValueException;
 import org.denysr.learning.office_booking.infrastructure.rest.ErrorResponse;
 import org.denysr.learning.office_booking.infrastructure.rest.UserResponseEntity;
 import org.denysr.learning.office_booking.infrastructure.rest.UserRestDto;
+import org.modelmapper.MappingException;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +31,7 @@ import java.util.stream.Collectors;
 @Log4j2
 final public class UserController {
     private final UserRepository userRepository;
+    private final ModelMapper modelMapper;
 
     @Operation(summary = "Create user", description = "Creating a new user")
     @ApiResponses(value = {
@@ -46,14 +52,12 @@ final public class UserController {
             UserRestDto userDto
     ) {
         try {
-            final UserId userId = userRepository.saveUser(new User(
-                    null,
-                    new UserEmail(userDto.getEmail()),
-                    new UserName(userDto.getFirstName(), userDto.getSecondName())
-            ));
+            final UserBuilder userBuilder = modelMapper.map(userDto, UserBuilder.class);
+            final UserId userId = userRepository.saveUser(userBuilder.build());
             return ResponseEntity.status(HttpStatus.CREATED).body(userId);
-        } catch (IllegalValueException e) {
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(new ErrorResponse(e.getMessage()));
+        } catch (MappingException e) {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+                    .body(new ErrorResponse(e.getCause().getMessage()));
         } catch (Exception e) {
             log.error("Error processing user creation", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse(""));
@@ -83,14 +87,13 @@ final public class UserController {
             UserRestDto userDto
     ) {
         try {
-            final UserId userIdObject = userRepository.saveUser(new User(
-                    new UserId(userId),
-                    new UserEmail(userDto.getEmail()),
-                    new UserName(userDto.getFirstName(), userDto.getSecondName())
-            ));
+            final UserBuilder userBuilder = modelMapper.map(userDto, UserBuilder.class)
+                    .withUserId(new UserId(userId));
+            final UserId userIdObject = userRepository.saveUser(userBuilder.build());
             return ResponseEntity.ok(userIdObject);
-        } catch (IllegalValueException e) {
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(new ErrorResponse(e.getMessage()));
+        } catch (MappingException e) {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+                    .body(new ErrorResponse(e.getCause().getMessage()));
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(e.getMessage()));
         } catch (Exception e) {
