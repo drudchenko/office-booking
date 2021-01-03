@@ -123,7 +123,7 @@ final public class UserController {
     ) {
         try {
             final User user = userRepository.findUserById(new UserId(userId));
-            return ResponseEntity.ok().body(userToResponseEntity(user));
+            return ResponseEntity.ok().body(modelMapper.map(user, UserResponseEntity.class));
         } catch (IllegalValueException e) {
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(new ErrorResponse(e.getMessage()));
         } catch (EntityNotFoundException e) {
@@ -150,7 +150,7 @@ final public class UserController {
                     userRepository
                             .getAllUsers()
                             .stream()
-                            .map(this::userToResponseEntity)
+                            .map(user -> modelMapper.map(user, UserResponseEntity.class))
                             .collect(Collectors.toList())
             );
         } catch (Exception e) {
@@ -186,14 +186,5 @@ final public class UserController {
             log.error("Error deleting user", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse(""));
         }
-    }
-
-    private UserResponseEntity userToResponseEntity(User user) {
-        return new UserResponseEntity(
-                user.getUserId().getUserId(),
-                user.getUserEmail().getEmail(),
-                user.getUserName().getFirstName(),
-                user.getUserName().getSecondName()
-        );
     }
 }

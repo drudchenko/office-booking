@@ -8,14 +8,14 @@ import lombok.Data;
 final public class UserResponseEntity {
 
     @Schema(description = "User id", example = "3")
-    private final int userId;
+    private int userId;
 
     @Schema(description = "User email", example = "john.doe@example.com")
-    private final String email;
+    private String email;
 
     @Schema(description = "User first name", example = "John")
-    private final String firstName;
+    private String firstName;
 
     @Schema(description = "User second name", example = "Doe")
-    private final String secondName;
+    private String secondName;
 }
