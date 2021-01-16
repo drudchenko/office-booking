@@ -6,17 +6,19 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
+import javax.persistence.Table;
 
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
-@Entity
+@Entity(name = "Users")
+@Table(indexes = @Index(columnList = "email", unique = true, name = "email"))
 public class UserJpaDto {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int userId;
+    @GeneratedValue
+    private Integer userId;
     private String email;
     private String firstName;
     private String secondName;
