@@ -1,6 +1,9 @@
 package org.denysr.learning.office_booking.domain.booking;
 
+import org.denysr.learning.office_booking.domain.user.User;
+import org.denysr.learning.office_booking.domain.user.UserEmail;
 import org.denysr.learning.office_booking.domain.user.UserId;
+import org.denysr.learning.office_booking.domain.user.UserName;
 import org.denysr.learning.office_booking.domain.validation.IllegalValueException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -10,16 +13,21 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.time.LocalDate;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class BookingTest {
 
     @ParameterizedTest
     @MethodSource("provideInvalidBookingConstructorParams")
     void should_fail_for_invalid_constructor_params(
-            BookingId bookingId, UserId userId, BookingDateRange bookingDateRange
+            BookingId bookingId, User user, BookingDateRange bookingDateRange
     ) {
-        assertThrows(IllegalValueException.class, () -> new Booking(bookingId, userId, bookingDateRange));
+        assertThrows(IllegalValueException.class, () -> new Booking(bookingId, user, bookingDateRange));
     }
 
     @Test
@@ -30,12 +38,12 @@ class BookingTest {
                 LocalDate.of(2020, 5, 28)
         );
 
-        Booking booking = new Booking(null, userId, bookingDateRange);
+        Booking booking = new Booking(null, createUserWithId(userId.getUserId()), bookingDateRange);
 
         assertAll(
                 () -> assertFalse(booking.hasId()),
                 () -> assertNull(booking.getBookingId()),
-                () -> assertEquals(userId, booking.getUserId()),
+                () -> assertEquals(createUserWithId(userId.getUserId()), booking.getUser()),
                 () -> assertEquals(bookingDateRange, booking.getBookingDateRange())
         );
     }
@@ -49,12 +57,12 @@ class BookingTest {
                 LocalDate.of(2020, 3, 28)
         );
 
-        Booking booking = new Booking(bookingId, userId, bookingDateRange);
+        Booking booking = new Booking(bookingId, createUserWithId(userId.getUserId()), bookingDateRange);
 
         assertAll(
                 () -> assertTrue(booking.hasId()),
                 () -> assertEquals(bookingId, booking.getBookingId()),
-                () -> assertEquals(userId, booking.getUserId()),
+                () -> assertEquals(createUserWithId(userId.getUserId()), booking.getUser()),
                 () -> assertEquals(bookingDateRange, booking.getBookingDateRange())
         );
     }
@@ -68,12 +76,12 @@ class BookingTest {
                 LocalDate.of(2020, 2, 2)
         );
 
-        Booking booking = new Booking(bookingId, userId, bookingDateRange);
+        Booking booking = new Booking(bookingId, createUserWithId(userId.getUserId()), bookingDateRange);
 
         assertAll(
                 () -> assertTrue(booking.hasId()),
                 () -> assertEquals(bookingId, booking.getBookingId()),
-                () -> assertEquals(userId, booking.getUserId()),
+                () -> assertEquals(createUserWithId(userId.getUserId()), booking.getUser()),
                 () -> assertEquals(bookingDateRange, booking.getBookingDateRange())
         );
     }
@@ -86,10 +94,18 @@ class BookingTest {
         return Stream.of(
                 Arguments.of(null, null, null),
                 Arguments.of(new BookingId(1), null, null),
-                Arguments.of(new BookingId(2), new UserId(8), null),
+                Arguments.of(new BookingId(2), createUserWithId(8), null),
                 Arguments.of(new BookingId(3), null, correctBookingDateRange),
-                Arguments.of(null, new UserId(3), null),
+                Arguments.of(null, createUserWithId(3), null),
                 Arguments.of(null, null, correctBookingDateRange)
+        );
+    }
+
+    private static User createUserWithId(int id) {
+        return new User(
+                new UserId(id),
+                new UserEmail("john@example.com"),
+                new UserName("John", "Doe")
         );
     }
 }

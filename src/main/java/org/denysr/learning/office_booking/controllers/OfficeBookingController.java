@@ -8,19 +8,28 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.lang3.tuple.Pair;
-import org.denysr.learning.office_booking.domain.booking.*;
-import org.denysr.learning.office_booking.domain.user.User;
+import org.denysr.learning.office_booking.domain.booking.Booking;
+import org.denysr.learning.office_booking.domain.booking.BookingDateRange;
+import org.denysr.learning.office_booking.domain.booking.BookingId;
+import org.denysr.learning.office_booking.domain.booking.BookingManagement;
+import org.denysr.learning.office_booking.domain.booking.BusinessWeek;
 import org.denysr.learning.office_booking.domain.user.UserId;
 import org.denysr.learning.office_booking.domain.validation.EntityNotFoundException;
 import org.denysr.learning.office_booking.domain.validation.IllegalValueException;
 import org.denysr.learning.office_booking.infrastructure.rest.BookingResponseEntity;
 import org.denysr.learning.office_booking.infrastructure.rest.ErrorResponse;
 import org.denysr.learning.office_booking.infrastructure.rest.OfficeBookingRestDto;
+import org.modelmapper.ModelMapper;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -32,6 +41,7 @@ import java.util.stream.Collectors;
 @Log4j2
 final public class OfficeBookingController {
     private final BookingManagement bookingManagement;
+    private final ModelMapper modelMapper;
 
     @Operation(summary = "Book office", description = "Book office for mentioned user for desired timeframe")
     @ApiResponses(value = {
@@ -88,10 +98,10 @@ final public class OfficeBookingController {
     ) {
         try {
             final BusinessWeek businessWeek = new BusinessWeek(businessDay);
-            List<Pair<Booking, User>> bookings = bookingManagement.fetchAllBookingsForWeek(businessWeek);
+            List<Booking> bookings = bookingManagement.fetchAllBookingsForWeek(businessWeek);
             return ResponseEntity.ok().body(
                     bookings.stream()
-                            .map(this::bookingToResponseEntity)
+                            .map(booking -> modelMapper.map(booking, BookingResponseEntity.class))
                             .collect(Collectors.toList())
             );
         } catch (IllegalValueException e) {
@@ -129,15 +139,5 @@ final public class OfficeBookingController {
             log.error("Error processing booking deletion", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse(""));
         }
-    }
-
-    private BookingResponseEntity bookingToResponseEntity(Pair<Booking, User> bookingPair) {
-        final Booking booking = bookingPair.getLeft();
-        return new BookingResponseEntity(
-                booking.getBookingId().getBookingId(),
-                bookingPair.getRight().getUserName().getFullName(),
-                booking.getBookingDateRange().getStartDate(),
-                booking.getBookingDateRange().getEndDate()
-        );
     }
 }

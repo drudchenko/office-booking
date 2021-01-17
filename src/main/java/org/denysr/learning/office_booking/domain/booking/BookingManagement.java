@@ -1,8 +1,6 @@
 package org.denysr.learning.office_booking.domain.booking;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 import org.denysr.learning.office_booking.domain.date.DateRange;
 import org.denysr.learning.office_booking.domain.user.User;
 import org.denysr.learning.office_booking.domain.user.UserId;
@@ -20,10 +18,11 @@ final public class BookingManagement {
     private final BookingRepository bookingRepository;
 
     public BookingId insertBooking(UserId userId, BookingDateRange bookingDateRange) {
-        Assert.notNull(userRepository.findUserById(userId), "User with mentioned id doesn't exist");
+        User user = userRepository.findUserById(userId);
+        Assert.notNull(user, "User with mentioned id doesn't exist");
         // Additional validation could be provided here, like check for timeframe intersections for particular user etc
         // Should be implemented after communicating to domain expert/product owner.
-        Booking booking = new Booking(null, userId, bookingDateRange);
+        Booking booking = new Booking(null, user, bookingDateRange);
         return bookingRepository.saveBooking(booking);
     }
 
@@ -31,16 +30,11 @@ final public class BookingManagement {
         bookingRepository.deleteBooking(bookingId);
     }
 
-    public List<Pair<Booking, User>> fetchAllBookingsForWeek(BusinessWeek businessWeek) {
+    public List<Booking> fetchAllBookingsForWeek(BusinessWeek businessWeek) {
         return bookingRepository.getBookingsForWeek(businessWeek)
                 .stream()
                 .map(booking -> withWeek(booking, businessWeek))
-                .map(this::fetchUserForBooking)
                 .collect(Collectors.toList());
-    }
-
-    private Pair<Booking, User> fetchUserForBooking(Booking booking) {
-        return new ImmutablePair<>(booking, userRepository.findUserById(booking.getUserId()));
     }
 
     private Booking withWeek(Booking booking, BusinessWeek businessWeek) {

@@ -10,6 +10,7 @@ import org.denysr.learning.office_booking.domain.user.UserId;
 import org.denysr.learning.office_booking.domain.user.UserName;
 import org.denysr.learning.office_booking.infrastructure.jpa.booking.BookingJpaDto;
 import org.denysr.learning.office_booking.infrastructure.jpa.user.UserJpaDto;
+import org.denysr.learning.office_booking.infrastructure.rest.BookingResponseEntity;
 import org.denysr.learning.office_booking.infrastructure.rest.UserRestDto;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
@@ -22,26 +23,42 @@ public class ModelMapperConfig {
     @Bean
     public ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
-        addUserDtoToBuilderMapping(modelMapper);
+        addUserRestDtoToBuilderMapping(modelMapper);
+        addBookingDomainToRestMapping(modelMapper);
         addUserJpaDtoToDomainMapping(modelMapper);
         addBookingJpaDtoToDomainMapping(modelMapper);
+        addBookingDomainModelToJpaMapping(modelMapper);
         return modelMapper;
     }
 
-    private void addUserDtoToBuilderMapping(ModelMapper modelMapper) {
+    private void addUserRestDtoToBuilderMapping(ModelMapper modelMapper) {
         TypeMap<UserRestDto, UserBuilder> userTypeMap = modelMapper.createTypeMap(UserRestDto.class, UserBuilder.class);
-        userTypeMap.setProvider(request -> {
-            UserRestDto source = (UserRestDto) request.getSource();
+        userTypeMap.setConverter(context -> {
+            UserRestDto source = context.getSource();
             return User.builder()
                     .withUserEmail(new UserEmail(source.getEmail()))
                     .withUserName(new UserName(source.getFirstName(), source.getSecondName()));
         });
     }
 
+    private void addBookingDomainToRestMapping(ModelMapper modelMapper) {
+        TypeMap<Booking, BookingResponseEntity> bookingTypeMap = modelMapper
+                .createTypeMap(Booking.class, BookingResponseEntity.class);
+        bookingTypeMap.setConverter(context -> {
+            Booking booking = context.getSource();
+            return new BookingResponseEntity(
+                    booking.getBookingId().getBookingId(),
+                    booking.getUser().getUserName().getFullName(),
+                    booking.getBookingDateRange().getStartDate(),
+                    booking.getBookingDateRange().getEndDate()
+            );
+        });
+    }
+
     private void addUserJpaDtoToDomainMapping(ModelMapper modelMapper) {
         TypeMap<UserJpaDto, User> userTypeMap = modelMapper.createTypeMap(UserJpaDto.class, User.class);
-        userTypeMap.setProvider(request -> {
-            UserJpaDto source = (UserJpaDto) request.getSource();
+        userTypeMap.setConverter(context -> {
+            UserJpaDto source = context.getSource();
             return User.builder()
                     .withUserId(new UserId(source.getUserId()))
                     .withUserEmail(new UserEmail(source.getEmail()))
@@ -52,13 +69,24 @@ public class ModelMapperConfig {
 
     private void addBookingJpaDtoToDomainMapping(ModelMapper modelMapper) {
         TypeMap<BookingJpaDto, Booking> bookingTypeMap = modelMapper.createTypeMap(BookingJpaDto.class, Booking.class);
-        bookingTypeMap.setProvider(request -> {
-            BookingJpaDto source = (BookingJpaDto) request.getSource();
+        bookingTypeMap.setConverter(context -> {
+            BookingJpaDto source = context.getSource();
+            User user = modelMapper.map(source.getUserDto(), User.class);
             return Booking.builder()
                     .withBookingId(new BookingId(source.getBookingId()))
-                    .withUserId(new UserId(source.getUserId()))
+                    .withUser(user)
                     .withBookingDateRange(new BookingDateRange(source.getStartDate(), source.getEndDate()))
                     .build();
+        });
+    }
+
+    private void addBookingDomainModelToJpaMapping(ModelMapper modelMapper) {
+        TypeMap<Booking, BookingJpaDto> bookingTypeMap = modelMapper.createTypeMap(Booking.class, BookingJpaDto.class);
+        bookingTypeMap.setProvider(request -> {
+            Booking source = (Booking) request.getSource();
+            BookingJpaDto bookingJpaDto = new BookingJpaDto();
+            bookingJpaDto.setUserDto(modelMapper.map(source.getUser(), UserJpaDto.class));
+            return bookingJpaDto;
         });
     }
 }

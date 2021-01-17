@@ -1,8 +1,11 @@
 package org.denysr.learning.office_booking.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.lang3.tuple.Pair;
-import org.denysr.learning.office_booking.domain.booking.*;
+import org.denysr.learning.office_booking.domain.booking.Booking;
+import org.denysr.learning.office_booking.domain.booking.BookingDateRange;
+import org.denysr.learning.office_booking.domain.booking.BookingId;
+import org.denysr.learning.office_booking.domain.booking.BookingManagement;
+import org.denysr.learning.office_booking.domain.booking.BusinessWeek;
 import org.denysr.learning.office_booking.domain.user.User;
 import org.denysr.learning.office_booking.domain.user.UserEmail;
 import org.denysr.learning.office_booking.domain.user.UserId;
@@ -28,7 +31,9 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -130,13 +135,15 @@ class OfficeBookingControllerIT {
         String userFirstName2 = "John";
         String userSecondName2 = "Doe";
 
-        Pair<Booking, User> booking1 = Pair.of(
-                new Booking(new BookingId(bookingId1), new UserId(userId1), new BookingDateRange(startDate1, endDate1)),
-                new User(new UserId(userId1), new UserEmail(userEmail1), new UserName(userFirstName1, userSecondName1))
+        Booking booking1 =new Booking(
+                new BookingId(bookingId1),
+                new User(new UserId(userId1), new UserEmail(userEmail1), new UserName(userFirstName1, userSecondName1)),
+                new BookingDateRange(startDate1, endDate1)
         );
-        Pair<Booking, User> booking2 = Pair.of(
-                new Booking(new BookingId(bookingId2), new UserId(userId2), new BookingDateRange(startDate2, endDate2)),
-                new User(new UserId(userId2), new UserEmail(userEmail2), new UserName(userFirstName2, userSecondName2))
+        Booking booking2 = new Booking(
+                new BookingId(bookingId2),
+                new User(new UserId(userId2), new UserEmail(userEmail2), new UserName(userFirstName2, userSecondName2)),
+                new BookingDateRange(startDate2, endDate2)
         );
 
         when(bookingManagement.fetchAllBookingsForWeek(new BusinessWeek(businessDay)))
