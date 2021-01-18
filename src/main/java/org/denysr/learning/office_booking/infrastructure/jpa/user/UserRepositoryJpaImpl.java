@@ -7,6 +7,7 @@ import org.denysr.learning.office_booking.domain.user.UserRepository;
 import org.denysr.learning.office_booking.domain.validation.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -40,6 +41,10 @@ public class UserRepositoryJpaImpl implements UserRepository {
 
     @Override
     public void deleteUser(UserId userId) throws EntityNotFoundException {
-        jpaUserRepository.deleteById(userId.getUserId());
+        try {
+            jpaUserRepository.deleteById(userId.getUserId());
+        } catch (EmptyResultDataAccessException e) {
+            throw new EntityNotFoundException("Entity with the mentioned id not found", e);
+        }
     }
 }
