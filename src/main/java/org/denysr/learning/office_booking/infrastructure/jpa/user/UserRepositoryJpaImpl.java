@@ -44,7 +44,7 @@ public class UserRepositoryJpaImpl implements UserRepository {
         try {
             jpaUserRepository.deleteById(userId.getUserId());
         } catch (EmptyResultDataAccessException e) {
-            throw new EntityNotFoundException("Entity with the mentioned id not found", e);
+            throw new EntityNotFoundException("User with the mentioned id not found", e);
         }
     }
 }
