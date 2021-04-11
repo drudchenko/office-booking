@@ -26,7 +26,7 @@ public class UserRepositoryJpaImpl implements UserRepository {
     @Override
     public List<User> getAllUsers() {
         return modelMapper.map(
-                jpaUserRepository.findAllBy(),
+                jpaUserRepository.findAll(),
                 new TypeToken<List<User>>() {}.getType()
         );
     }
