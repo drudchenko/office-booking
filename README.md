@@ -3,7 +3,7 @@ Just a test application, which provides API for booking office spots for the tea
 
 # Prerequisites
 To run the application you should have:
-- JDK (was tested with OpenJDK 11)
+- JDK (was tested with OpenJDK 21)
 - Gradle (was tested with Gradle 6.7)
 
 ## How to run

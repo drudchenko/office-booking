@@ -7,7 +7,7 @@ plugins {
 group = 'org.denysr.learning-projects'
 version = '1.0.0-SNAPSHOT'
 description = 'Test project for office booking'
-sourceCompatibility = '11'
+sourceCompatibility = '21'
 
 configurations {
     compileOnly {
