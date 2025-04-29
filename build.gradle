@@ -7,7 +7,11 @@ plugins {
 group = 'org.denysr.learning-projects'
 version = '1.0.0-SNAPSHOT'
 description = 'Test project for office booking'
-sourceCompatibility = '21'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
 
 configurations {
     compileOnly {
