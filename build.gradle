@@ -37,10 +37,6 @@ dependencies {
     implementation group: 'org.modelmapper', name: 'modelmapper', version: property("version.modelmapper")
     implementation group: 'commons-validator', name: 'commons-validator', version: property("version.commons-validator")
     implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: property("version.openapi-ui")
-
-
-    // TODO: find out why this dependency is here and try to remove it
-    implementation 'org.antlr:antlr-complete:3.5.2'
 }
 
 test {
