@@ -1,6 +1,9 @@
 # What
 Just a test application, which provides API for booking office spots for the team.
 
+# Why
+for fun and to explore the functionality of Visual Studio Code :-)
+
 # Prerequisites
 To run the application you should have:
 - JDK (was tested with OpenJDK 21)
