@@ -32,9 +32,9 @@ public class UserRestMapperTest {
         User user = modelMapper.map(userRestDto, UserBuilder.class).build();
 
         assertAll(
-                () -> assertEquals(CORRECT_EMAIL, user.getUserEmail().getEmail()),
-                () -> assertEquals(CORRECT_FIRST_NAME, user.getUserName().getFirstName()),
-                () -> assertEquals(CORRECT_SECOND_NAME, user.getUserName().getSecondName())
+                () -> assertEquals(CORRECT_EMAIL, user.userEmail().getEmail()),
+                () -> assertEquals(CORRECT_FIRST_NAME, user.userName().getFirstName()),
+                () -> assertEquals(CORRECT_SECOND_NAME, user.userName().getSecondName())
         );
     }
 
