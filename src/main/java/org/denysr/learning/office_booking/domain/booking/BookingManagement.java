@@ -38,7 +38,7 @@ final public class BookingManagement {
     }
 
     private Booking withWeek(Booking booking, BusinessWeek businessWeek) {
-        final DateRange weekRange = booking.getBookingDateRange().getRangeForWeek(businessWeek);
+        final DateRange weekRange = booking.bookingDateRange().getRangeForWeek(businessWeek);
         return booking.toBuilder()
                 .withBookingDateRange(new BookingDateRange(weekRange))
                 .build();

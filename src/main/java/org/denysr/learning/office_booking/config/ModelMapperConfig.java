@@ -77,10 +77,10 @@ public class ModelMapperConfig {
         bookingResponseMap.setConverter(context -> {
             Booking booking = context.getSource();
             return new BookingResponseEntity(
-                    booking.getBookingId().getBookingId(),
-                    booking.getUser().userName().getFullName(),
-                    booking.getBookingDateRange().getStartDate(),
-                    booking.getBookingDateRange().getEndDate()
+                    booking.bookingId().getBookingId(),
+                    booking.user().userName().getFullName(),
+                    booking.bookingDateRange().getStartDate(),
+                    booking.bookingDateRange().getEndDate()
             );
         });
 
@@ -99,7 +99,10 @@ public class ModelMapperConfig {
         bookingtoJpaMap.setProvider(request -> {
             Booking source = (Booking) request.getSource();
             BookingJpaDto bookingJpaDto = new BookingJpaDto();
-            bookingJpaDto.setUserDto(modelMapper.map(source.getUser(), UserJpaDto.class));
+            bookingJpaDto.setBookingId(source.bookingId().getBookingId());
+            bookingJpaDto.setStartDate(source.bookingDateRange().getStartDate());
+            bookingJpaDto.setEndDate(source.bookingDateRange().getEndDate());
+            bookingJpaDto.setUserDto(modelMapper.map(source.user(), UserJpaDto.class));
             return bookingJpaDto;
         });
     }
