@@ -22,8 +22,8 @@ class UserNameTest {
     ) {
         UserName userName = new UserName(firstNameParam, secondNameParam);
         assertAll(
-                () -> assertEquals(expectedFirstName, userName.getFirstName()),
-                () -> assertEquals(expectedSecondName, userName.getSecondName()),
+                () -> assertEquals(expectedFirstName, userName.firstName()),
+                () -> assertEquals(expectedSecondName, userName.secondName()),
                 () -> assertEquals(expectedFullName, userName.getFullName())
         );
     }

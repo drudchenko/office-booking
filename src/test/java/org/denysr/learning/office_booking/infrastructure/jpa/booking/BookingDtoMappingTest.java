@@ -58,7 +58,7 @@ public class BookingDtoMappingTest {
         Booking booking = modelMapper.map(bookingJpaDto, Booking.class);
 
         assertAll(
-                () -> assertEquals(BOOKING_ID, booking.bookingId().getBookingId()),
+                () -> assertEquals(BOOKING_ID, booking.bookingId().bookingId()),
                 () -> assertEquals(USER, booking.user()),
                 () -> assertEquals(START_DATE, booking.bookingDateRange().getStartDate()),
                 () -> assertEquals(END_DATE, booking.bookingDateRange().getEndDate())

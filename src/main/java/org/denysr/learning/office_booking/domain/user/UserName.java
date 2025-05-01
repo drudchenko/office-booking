@@ -1,16 +1,11 @@
 package org.denysr.learning.office_booking.domain.user;
 
-import lombok.Value;
 import org.apache.commons.lang3.Validate;
 import org.denysr.learning.office_booking.domain.validation.ValidatorWrapper;
 
-@Value
-public class UserName {
+public record UserName(String firstName, String secondName) {
     public static final int MIN_USER_NAME_LENGTH = 2;
     public static final int MAX_USER_NAME_LENGTH = 70;
-
-    String firstName;
-    String secondName;
 
     public UserName(final String firstName, final String secondName) {
         ValidatorWrapper.wrapValidators(

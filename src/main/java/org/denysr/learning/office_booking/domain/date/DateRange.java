@@ -26,6 +26,13 @@ public record DateRange (LocalDate startDate, LocalDate endDate) {
                 .anyMatch(this::isBusinessDay);
     }
 
+    public int getBusinessDaysCount() {
+        return (int) startDate
+                .datesUntil(endDate.plusDays(1))
+                .filter(this::isBusinessDay)
+                .count();
+    }
+
     private boolean isBusinessDay(LocalDate date) {
         return date.getDayOfWeek().compareTo(DayOfWeek.FRIDAY) <= 0;
     }

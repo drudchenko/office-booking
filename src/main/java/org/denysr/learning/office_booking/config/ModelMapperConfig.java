@@ -42,10 +42,10 @@ public class ModelMapperConfig {
         userResponseMap.setConverter(context -> {
             User user = context.getSource();
             return new UserResponseEntity(
-                    user.userId().getUserId(),
-                    user.userEmail().getEmail(),
-                    user.userName().getFirstName(),
-                    user.userName().getSecondName()
+                    user.userId().userId(),
+                    user.userEmail().email(),
+                    user.userName().firstName(),
+                    user.userName().secondName()
             );
         });
 
@@ -63,10 +63,10 @@ public class ModelMapperConfig {
         userToJpaMap.setProvider(request -> {
             User source = (User) request.getSource();
             UserJpaDto userJpaDto = new UserJpaDto();
-            userJpaDto.setUserId(source.userId().getUserId());
-            userJpaDto.setEmail(source.userEmail().getEmail());
-            userJpaDto.setFirstName(source.userName().getFirstName());
-            userJpaDto.setSecondName(source.userName().getSecondName());
+            userJpaDto.setUserId(source.userId().userId());
+            userJpaDto.setEmail(source.userEmail().email());
+            userJpaDto.setFirstName(source.userName().firstName());
+            userJpaDto.setSecondName(source.userName().secondName());
             return userJpaDto;
         });
     }
@@ -77,7 +77,7 @@ public class ModelMapperConfig {
         bookingResponseMap.setConverter(context -> {
             Booking booking = context.getSource();
             return new BookingResponseEntity(
-                    booking.bookingId().getBookingId(),
+                    booking.bookingId().bookingId(),
                     booking.user().userName().getFullName(),
                     booking.bookingDateRange().getStartDate(),
                     booking.bookingDateRange().getEndDate()
@@ -99,7 +99,7 @@ public class ModelMapperConfig {
         bookingtoJpaMap.setProvider(request -> {
             Booking source = (Booking) request.getSource();
             BookingJpaDto bookingJpaDto = new BookingJpaDto();
-            bookingJpaDto.setBookingId(source.bookingId().getBookingId());
+            bookingJpaDto.setBookingId(source.bookingId().bookingId());
             bookingJpaDto.setStartDate(source.bookingDateRange().getStartDate());
             bookingJpaDto.setEndDate(source.bookingDateRange().getEndDate());
             bookingJpaDto.setUserDto(modelMapper.map(source.user(), UserJpaDto.class));

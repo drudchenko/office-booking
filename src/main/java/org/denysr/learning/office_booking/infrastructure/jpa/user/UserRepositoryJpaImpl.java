@@ -20,7 +20,7 @@ public class UserRepositoryJpaImpl implements UserRepository {
 
     @Override
     public User findUserById(UserId userId) throws EntityNotFoundException {
-        return modelMapper.map(jpaUserRepository.findByUserId(userId.getUserId()), User.class);
+        return modelMapper.map(jpaUserRepository.findByUserId(userId.userId()), User.class);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class UserRepositoryJpaImpl implements UserRepository {
     @Override
     public void deleteUser(UserId userId) throws EntityNotFoundException {
         try {
-            jpaUserRepository.deleteById(userId.getUserId());
+            jpaUserRepository.deleteById(userId.userId());
         } catch (EmptyResultDataAccessException e) {
             throw new EntityNotFoundException("User with the mentioned id not found", e);
         }

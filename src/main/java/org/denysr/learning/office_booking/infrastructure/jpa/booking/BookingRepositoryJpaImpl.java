@@ -38,7 +38,7 @@ public class BookingRepositoryJpaImpl implements BookingRepository {
     @Override
     public void deleteBooking(BookingId bookingId) throws EntityNotFoundException {
         try {
-            jpaBookingRepository.deleteById(bookingId.getBookingId());
+            jpaBookingRepository.deleteById(bookingId.bookingId());
         } catch (EmptyResultDataAccessException e) {
             throw new EntityNotFoundException("Booking with the mentioned id not found", e);
         }

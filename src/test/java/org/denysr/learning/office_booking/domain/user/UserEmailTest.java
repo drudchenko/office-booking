@@ -15,7 +15,7 @@ class UserEmailTest {
     @MethodSource("provideCorrectEmail")
     void should_create_email_for_correct_param(String emailParam, String expectedEmail) {
         UserEmail userEmail = new UserEmail(emailParam);
-        assertEquals(expectedEmail, userEmail.getEmail());
+        assertEquals(expectedEmail, userEmail.email());
     }
 
     @ParameterizedTest
