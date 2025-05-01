@@ -2,7 +2,6 @@ package org.denysr.learning.office_booking.domain.booking;
 
 import lombok.Builder;
 import lombok.Data;
-import org.apache.commons.lang3.Validate;
 import org.denysr.learning.office_booking.domain.user.User;
 import org.denysr.learning.office_booking.domain.validation.ValidatorWrapper;
 
@@ -17,8 +16,8 @@ final public class Booking {
 
     public Booking(BookingId bookingId, User user, BookingDateRange bookingDateRange) {
         ValidatorWrapper.wrapValidators(
-                () -> Validate.notNull(user),
-                () -> Validate.notNull(bookingDateRange)
+                () -> Objects.requireNonNull(user),
+                () -> Objects.requireNonNull(bookingDateRange)
         );
         this.bookingId = bookingId;
         this.user = user;
