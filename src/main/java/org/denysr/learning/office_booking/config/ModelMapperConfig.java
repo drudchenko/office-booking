@@ -11,6 +11,7 @@ import org.denysr.learning.office_booking.domain.user.UserName;
 import org.denysr.learning.office_booking.infrastructure.jpa.booking.BookingJpaDto;
 import org.denysr.learning.office_booking.infrastructure.jpa.user.UserJpaDto;
 import org.denysr.learning.office_booking.infrastructure.rest.BookingResponseEntity;
+import org.denysr.learning.office_booking.infrastructure.rest.UserResponseEntity;
 import org.denysr.learning.office_booking.infrastructure.rest.UserRestDto;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
@@ -27,6 +28,7 @@ public class ModelMapperConfig {
         addBookingDomainToRestMapping(modelMapper);
         addUserJpaDtoToDomainMapping(modelMapper);
         addBookingJpaDtoToDomainMapping(modelMapper);
+        addUserDomainToRestMapping(modelMapper);
         addBookingDomainModelToJpaMapping(modelMapper);
         return modelMapper;
     }
@@ -36,8 +38,21 @@ public class ModelMapperConfig {
         userTypeMap.setConverter(context -> {
             UserRestDto source = context.getSource();
             return User.builder()
-                    .withUserEmail(new UserEmail(source.getEmail()))
-                    .withUserName(new UserName(source.getFirstName(), source.getSecondName()));
+                    .withUserEmail(new UserEmail(source.email()))
+                    .withUserName(new UserName(source.firstName(), source.secondName()));
+        });
+    }
+
+    private void addUserDomainToRestMapping(ModelMapper modelMapper) {
+        TypeMap<User, UserResponseEntity> userTypeMap = modelMapper.createTypeMap(User.class, UserResponseEntity.class);
+        userTypeMap.setConverter(context -> {
+            User user = context.getSource();
+            return new UserResponseEntity(
+                    user.getUserId().getUserId(),
+                    user.getUserEmail().getEmail(),
+                    user.getUserName().getFirstName(),
+                    user.getUserName().getSecondName()
+            );
         });
     }
 

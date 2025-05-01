@@ -61,8 +61,8 @@ final public class OfficeBookingController {
     ) {
         try {
             BookingId bookingId = bookingManagement.insertBooking(
-                    new UserId(officeBookingDto.getUserId()),
-                    new BookingDateRange(officeBookingDto.getStartDate(), officeBookingDto.getEndDate())
+                    new UserId(officeBookingDto.userId()),
+                    new BookingDateRange(officeBookingDto.startDate(), officeBookingDto.endDate())
             );
             return ResponseEntity.status(HttpStatus.CREATED).body(bookingId);
         } catch (IllegalValueException e) {

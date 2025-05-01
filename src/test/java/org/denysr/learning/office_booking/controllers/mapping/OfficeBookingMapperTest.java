@@ -43,10 +43,10 @@ public class OfficeBookingMapperTest {
         BookingResponseEntity bookingResponseEntity = modelMapper.map(booking, BookingResponseEntity.class);
 
         assertAll(
-                () -> assertEquals(CORRECT_BOOKING_ID, bookingResponseEntity.getBookingId()),
-                () -> assertEquals("johnnie english", bookingResponseEntity.getUserName()),
-                () -> assertEquals(DATE_START, bookingResponseEntity.getStartDate()),
-                () -> assertEquals(DATE_END, bookingResponseEntity.getEndDate())
+                () -> assertEquals(CORRECT_BOOKING_ID, bookingResponseEntity.bookingId()),
+                () -> assertEquals("johnnie english", bookingResponseEntity.userName()),
+                () -> assertEquals(DATE_START, bookingResponseEntity.startDate()),
+                () -> assertEquals(DATE_END, bookingResponseEntity.endDate())
         );
     }
 }

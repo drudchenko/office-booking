@@ -49,10 +49,10 @@ public class UserRestMapperTest {
         UserResponseEntity userResponseEntity = modelMapper.map(user, UserResponseEntity.class);
 
         assertAll(
-                () -> assertEquals(CORRECT_ID, userResponseEntity.getUserId()),
-                () -> assertEquals(CORRECT_EMAIL, userResponseEntity.getEmail()),
-                () -> assertEquals(CORRECT_FIRST_NAME, userResponseEntity.getFirstName()),
-                () -> assertEquals(CORRECT_SECOND_NAME, userResponseEntity.getSecondName())
+                () -> assertEquals(CORRECT_ID, userResponseEntity.userId()),
+                () -> assertEquals(CORRECT_EMAIL, userResponseEntity.email()),
+                () -> assertEquals(CORRECT_FIRST_NAME, userResponseEntity.firstName()),
+                () -> assertEquals(CORRECT_SECOND_NAME, userResponseEntity.secondName())
         );
     }
 }
