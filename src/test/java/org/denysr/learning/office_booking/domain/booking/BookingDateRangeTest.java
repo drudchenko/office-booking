@@ -67,8 +67,8 @@ class BookingDateRangeTest {
         BookingDateRange bookingDateRange = new BookingDateRange(startDateParam, endDateParam);
         DateRange rangeWeek = bookingDateRange.getRangeForWeek(businessWeek);
         assertAll(
-                () -> assertEquals(expectedRangeStart, rangeWeek.getStartDate()),
-                () -> assertEquals(expectedRangeEnd, rangeWeek.getEndDate())
+                () -> assertEquals(expectedRangeStart, rangeWeek.startDate()),
+                () -> assertEquals(expectedRangeEnd, rangeWeek.endDate())
         );
     }
 

@@ -34,11 +34,11 @@ public class BookingDateRange {
     }
 
     public LocalDate getStartDate() {
-        return dateRange.getStartDate();
+        return dateRange.startDate();
     }
 
     public LocalDate getEndDate() {
-        return dateRange.getEndDate();
+        return dateRange.endDate();
     }
 
     public DateRange getRangeForWeek(BusinessWeek businessWeek) {

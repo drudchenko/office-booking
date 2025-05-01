@@ -17,8 +17,8 @@ class DateRangeTest {
     void should_create_daterange_for_correct_dates(LocalDate startDate, LocalDate endDate) {
         DateRange dateRange = new DateRange(startDate, endDate);
         assertAll(
-                () -> assertEquals(startDate, dateRange.getStartDate()),
-                () -> assertEquals(endDate, dateRange.getEndDate())
+                () -> assertEquals(startDate, dateRange.startDate()),
+                () -> assertEquals(endDate, dateRange.endDate())
         );
     }
 

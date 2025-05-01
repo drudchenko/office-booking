@@ -18,10 +18,10 @@ public class BusinessWeek {
     }
 
     public LocalDate getBusinessWeekStart() {
-        return dateRange.getStartDate();
+        return dateRange.startDate();
     }
 
     public LocalDate getBusinessWeekEnd() {
-        return dateRange.getEndDate();
+        return dateRange.endDate();
     }
 }
