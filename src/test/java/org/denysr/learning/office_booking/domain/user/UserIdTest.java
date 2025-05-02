@@ -17,7 +17,7 @@ class UserIdTest {
     @MethodSource("provideCorrectIds")
     void user_id_should_be_created_with_proper_values(int value) {
         final BookingId bookingId = new BookingId(value);
-        assertEquals(value, bookingId.getBookingId());
+        assertEquals(value, bookingId.bookingId());
     }
 
     @ParameterizedTest

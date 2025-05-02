@@ -39,8 +39,8 @@ class BookingDateRangeTest {
         BookingDateRange range1 = new BookingDateRange(startDate1, endDate1);
         BookingDateRange range2 = new BookingDateRange(startDate2, endDate2);
         assertAll(
-                () -> assertTrue(range1.intersectsWith(range2.getDateRange())),
-                () -> assertTrue(range2.intersectsWith(range1.getDateRange()))
+                () -> assertTrue(range1.intersectsWith(range2.dateRange())),
+                () -> assertTrue(range2.intersectsWith(range1.dateRange()))
         );
     }
 
@@ -50,8 +50,8 @@ class BookingDateRangeTest {
         BookingDateRange range1 = new BookingDateRange(startDate1, endDate1);
         BookingDateRange range2 = new BookingDateRange(startDate2, endDate2);
         assertAll(
-                () -> assertFalse(range1.intersectsWith(range2.getDateRange())),
-                () -> assertFalse(range2.intersectsWith(range1.getDateRange()))
+                () -> assertFalse(range1.intersectsWith(range2.dateRange())),
+                () -> assertFalse(range2.intersectsWith(range1.dateRange()))
         );
     }
 
@@ -67,8 +67,8 @@ class BookingDateRangeTest {
         BookingDateRange bookingDateRange = new BookingDateRange(startDateParam, endDateParam);
         DateRange rangeWeek = bookingDateRange.getRangeForWeek(businessWeek);
         assertAll(
-                () -> assertEquals(expectedRangeStart, rangeWeek.getStartDate()),
-                () -> assertEquals(expectedRangeEnd, rangeWeek.getEndDate())
+                () -> assertEquals(expectedRangeStart, rangeWeek.startDate()),
+                () -> assertEquals(expectedRangeEnd, rangeWeek.endDate())
         );
     }
 

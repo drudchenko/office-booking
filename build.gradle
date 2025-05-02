@@ -37,6 +37,7 @@ dependencies {
     implementation group: 'org.modelmapper', name: 'modelmapper', version: property("version.modelmapper")
     implementation group: 'commons-validator', name: 'commons-validator', version: property("version.commons-validator")
     implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: property("version.openapi-ui")
+    implementation group: 'org.hibernate', name: 'hibernate-validator', version: property("version.hibernate-validator")
 }
 
 test {

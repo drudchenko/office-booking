@@ -52,10 +52,10 @@ public class UserDtoMappingTest {
         User user = modelMapper.map(userJpaDto, User.class);
 
         assertAll(
-                () -> assertEquals(USER_ID, user.getUserId().getUserId()),
-                () -> assertEquals(USER_EMAIL, user.getUserEmail().getEmail()),
-                () -> assertEquals(USER_FIRST_NAME, user.getUserName().getFirstName()),
-                () -> assertEquals(USER_SECOND_NAME, user.getUserName().getSecondName())
+                () -> assertEquals(USER_ID, user.userId().userId()),
+                () -> assertEquals(USER_EMAIL, user.userEmail().email()),
+                () -> assertEquals(USER_FIRST_NAME, user.userName().firstName()),
+                () -> assertEquals(USER_SECOND_NAME, user.userName().secondName())
         );
     }
 
@@ -73,14 +73,14 @@ public class UserDtoMappingTest {
         List<User> users = modelMapper.map(jpaDtoUsers, userListType);
 
         assertAll(
-                () -> assertEquals(USER_ID, users.get(0).getUserId().getUserId()),
-                () -> assertEquals(USER_EMAIL, users.get(0).getUserEmail().getEmail()),
-                () -> assertEquals(USER_FIRST_NAME, users.get(0).getUserName().getFirstName()),
-                () -> assertEquals(USER_SECOND_NAME, users.get(0).getUserName().getSecondName()),
-                () -> assertEquals(userId2, users.get(1).getUserId().getUserId()),
-                () -> assertEquals(userEmail2, users.get(1).getUserEmail().getEmail()),
-                () -> assertEquals(userFirstName2, users.get(1).getUserName().getFirstName()),
-                () -> assertEquals(userSecondName2, users.get(1).getUserName().getSecondName())
+                () -> assertEquals(USER_ID, users.get(0).userId().userId()),
+                () -> assertEquals(USER_EMAIL, users.get(0).userEmail().email()),
+                () -> assertEquals(USER_FIRST_NAME, users.get(0).userName().firstName()),
+                () -> assertEquals(USER_SECOND_NAME, users.get(0).userName().secondName()),
+                () -> assertEquals(userId2, users.get(1).userId().userId()),
+                () -> assertEquals(userEmail2, users.get(1).userEmail().email()),
+                () -> assertEquals(userFirstName2, users.get(1).userName().firstName()),
+                () -> assertEquals(userSecondName2, users.get(1).userName().secondName())
         );
     }
 }

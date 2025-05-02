@@ -29,9 +29,9 @@ class UserTest {
 
         assertAll(
                 () -> assertFalse(user.hasId()),
-                () -> assertNull(user.getUserId()),
-                () -> assertEquals(userEmail, user.getUserEmail()),
-                () -> assertEquals(userName, user.getUserName())
+                () -> assertNull(user.userId()),
+                () -> assertEquals(userEmail, user.userEmail()),
+                () -> assertEquals(userName, user.userName())
         );
     }
 
@@ -45,9 +45,9 @@ class UserTest {
 
         assertAll(
                 () -> assertTrue(user.hasId()),
-                () -> assertEquals(userId, user.getUserId()),
-                () -> assertEquals(userEmail, user.getUserEmail()),
-                () -> assertEquals(userName, user.getUserName())
+                () -> assertEquals(userId, user.userId()),
+                () -> assertEquals(userEmail, user.userEmail()),
+                () -> assertEquals(userName, user.userName())
         );
     }
 
@@ -61,9 +61,9 @@ class UserTest {
 
         assertAll(
                 () -> assertTrue(user.hasId()),
-                () -> assertEquals(userId, user.getUserId()),
-                () -> assertEquals(userEmail, user.getUserEmail()),
-                () -> assertEquals(userName, user.getUserName())
+                () -> assertEquals(userId, user.userId()),
+                () -> assertEquals(userEmail, user.userEmail()),
+                () -> assertEquals(userName, user.userName())
         );
     }
 

@@ -5,7 +5,6 @@ import org.denysr.learning.office_booking.domain.booking.Booking;
 import org.denysr.learning.office_booking.domain.booking.BookingId;
 import org.denysr.learning.office_booking.domain.booking.BookingRepository;
 import org.denysr.learning.office_booking.domain.booking.BusinessWeek;
-import org.denysr.learning.office_booking.domain.user.User;
 import org.denysr.learning.office_booking.domain.validation.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -13,7 +12,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Repository
@@ -40,7 +38,7 @@ public class BookingRepositoryJpaImpl implements BookingRepository {
     @Override
     public void deleteBooking(BookingId bookingId) throws EntityNotFoundException {
         try {
-            jpaBookingRepository.deleteById(bookingId.getBookingId());
+            jpaBookingRepository.deleteById(bookingId.bookingId());
         } catch (EmptyResultDataAccessException e) {
             throw new EntityNotFoundException("Booking with the mentioned id not found", e);
         }

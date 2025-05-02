@@ -38,13 +38,13 @@ class BookingTest {
                 LocalDate.of(2020, 5, 28)
         );
 
-        Booking booking = new Booking(null, createUserWithId(userId.getUserId()), bookingDateRange);
+        Booking booking = new Booking(null, createUserWithId(userId.userId()), bookingDateRange);
 
         assertAll(
                 () -> assertFalse(booking.hasId()),
-                () -> assertNull(booking.getBookingId()),
-                () -> assertEquals(createUserWithId(userId.getUserId()), booking.getUser()),
-                () -> assertEquals(bookingDateRange, booking.getBookingDateRange())
+                () -> assertNull(booking.bookingId()),
+                () -> assertEquals(createUserWithId(userId.userId()), booking.user()),
+                () -> assertEquals(bookingDateRange, booking.bookingDateRange())
         );
     }
 
@@ -57,13 +57,13 @@ class BookingTest {
                 LocalDate.of(2020, 3, 28)
         );
 
-        Booking booking = new Booking(bookingId, createUserWithId(userId.getUserId()), bookingDateRange);
+        Booking booking = new Booking(bookingId, createUserWithId(userId.userId()), bookingDateRange);
 
         assertAll(
                 () -> assertTrue(booking.hasId()),
-                () -> assertEquals(bookingId, booking.getBookingId()),
-                () -> assertEquals(createUserWithId(userId.getUserId()), booking.getUser()),
-                () -> assertEquals(bookingDateRange, booking.getBookingDateRange())
+                () -> assertEquals(bookingId, booking.bookingId()),
+                () -> assertEquals(createUserWithId(userId.userId()), booking.user()),
+                () -> assertEquals(bookingDateRange, booking.bookingDateRange())
         );
     }
 
@@ -76,13 +76,13 @@ class BookingTest {
                 LocalDate.of(2020, 2, 2)
         );
 
-        Booking booking = new Booking(bookingId, createUserWithId(userId.getUserId()), bookingDateRange);
+        Booking booking = new Booking(bookingId, createUserWithId(userId.userId()), bookingDateRange);
 
         assertAll(
                 () -> assertTrue(booking.hasId()),
-                () -> assertEquals(bookingId, booking.getBookingId()),
-                () -> assertEquals(createUserWithId(userId.getUserId()), booking.getUser()),
-                () -> assertEquals(bookingDateRange, booking.getBookingDateRange())
+                () -> assertEquals(bookingId, booking.bookingId()),
+                () -> assertEquals(createUserWithId(userId.userId()), booking.user()),
+                () -> assertEquals(bookingDateRange, booking.bookingDateRange())
         );
     }
 

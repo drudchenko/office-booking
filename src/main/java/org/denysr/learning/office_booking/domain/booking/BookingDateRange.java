@@ -1,24 +1,20 @@
 package org.denysr.learning.office_booking.domain.booking;
 
-import lombok.Value;
 import org.apache.commons.lang3.Validate;
 import org.denysr.learning.office_booking.domain.date.DateRange;
 import org.denysr.learning.office_booking.domain.validation.ValidatorWrapper;
 
 import java.time.LocalDate;
 
-@Value
-public class BookingDateRange {
-    DateRange dateRange;
+public record BookingDateRange(DateRange dateRange) {
 
-    public BookingDateRange(DateRange dateRange) {
+    public BookingDateRange{
         ValidatorWrapper.wrapValidators(
                 () -> Validate.isTrue(
                         dateRange.hasBusinessDayInRange(),
                         "There should be at least one business day in the range"
                 )
         );
-        this.dateRange = dateRange;
     }
 
     public BookingDateRange(LocalDate startDate, LocalDate endDate) {
@@ -34,17 +30,17 @@ public class BookingDateRange {
     }
 
     public LocalDate getStartDate() {
-        return dateRange.getStartDate();
+        return dateRange.startDate();
     }
 
     public LocalDate getEndDate() {
-        return dateRange.getEndDate();
+        return dateRange.endDate();
     }
 
     public DateRange getRangeForWeek(BusinessWeek businessWeek) {
         ValidatorWrapper.wrapValidators(
                 () -> Validate.isTrue(
-                        intersectsWith(businessWeek.getDateRange()),
+                        intersectsWith(businessWeek.dateRange()),
                         "The timeframe has no intersection with the week"
                 )
         );
