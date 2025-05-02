@@ -3,7 +3,7 @@ name: Test and Build Artifact
 on:
   pull_request:
     branches:
-      - main
+      - master
 
 jobs:
   test:
@@ -21,15 +21,6 @@ jobs:
         with:
           java-version: '21'
           distribution: 'zulu'
-
-      # Cache Gradle dependencies
-      - name: Cache Gradle dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
 
       # Run Gradle build
       - name: Run Gradle Build
