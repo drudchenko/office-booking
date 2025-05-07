@@ -63,7 +63,9 @@ public class ModelMapperConfig {
         userToJpaMap.setProvider(request -> {
             User source = (User) request.getSource();
             UserJpaDto userJpaDto = new UserJpaDto();
-            userJpaDto.setUserId(source.userId().userId());
+            if (source.userId() != null) {
+                userJpaDto.setUserId(source.userId().userId());
+            }
             userJpaDto.setEmail(source.userEmail().email());
             userJpaDto.setFirstName(source.userName().firstName());
             userJpaDto.setSecondName(source.userName().secondName());
