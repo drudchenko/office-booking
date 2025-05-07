@@ -1,6 +1,7 @@
 package org.denysr.learning.office_booking.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -87,9 +88,9 @@ final public class OfficeBookingController {
     })
     @GetMapping("/bookings/{businessDay}")
     public ResponseEntity<?> getBookings(
-            @PathVariable
+            @PathVariable("businessDay")
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-            @Schema(
+            @Parameter(
                     description = "Business day, which represents the week for which we're retrieving bookings",
                     required = true,
                     example = "2020-12-14"
@@ -124,8 +125,8 @@ final public class OfficeBookingController {
     })
     @DeleteMapping(value = "/booking/{bookingId}")
     public ResponseEntity<?> deleteBooking(
-            @PathVariable
-            @Schema(description = "Id of the booking to delete", required = true, example = "20")
+            @PathVariable("bookingId")
+            @Parameter(description = "Id of the booking to delete", required = true, example = "20")
             int bookingId
     ) {
         try {
