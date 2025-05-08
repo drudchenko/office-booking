@@ -32,7 +32,7 @@ class UserControllerIT {
     @Autowired
     private MockMvc mvc;
     @MockitoBean
-    private UserRepository userRepository;
+    private UserManagement userManagement;
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
@@ -44,7 +44,7 @@ class UserControllerIT {
         User expectedUser = new User(null, new UserEmail(email), new UserName(firstName, secondName));
         int expectedUserId = 5;
 
-        when(userRepository.saveUser(expectedUser)).thenReturn(new UserId(expectedUserId));
+        when(userManagement.registerUser(expectedUser)).thenReturn(new UserId(expectedUserId));
 
         UserRestDto userRequest = new UserRestDto(email, firstName, secondName);
 
@@ -77,7 +77,7 @@ class UserControllerIT {
         String secondName = "Doe";
         User expectedUser = new User(null, new UserEmail(email), new UserName(firstName, secondName));
 
-        when(userRepository.saveUser(expectedUser)).thenThrow(new RuntimeException("Very strange error!"));
+        when(userManagement.registerUser(expectedUser)).thenThrow(new RuntimeException("Very strange error!"));
 
         UserRestDto userRequest = new UserRestDto(email, firstName, secondName);
 
@@ -96,7 +96,7 @@ class UserControllerIT {
         String secondName = "Doe";
 
         User expectedUser = new User(new UserId(userId), new UserEmail(email), new UserName(firstName, secondName));
-        when(userRepository.saveUser(expectedUser)).thenReturn(new UserId(userId));
+        when(userManagement.changeUser(expectedUser)).thenReturn(new UserId(userId));
 
         UserRestDto userRequest = new UserRestDto(email, firstName, secondName);
 
@@ -132,7 +132,7 @@ class UserControllerIT {
         String errorMessage = "test message";
 
         User expectedUser = new User(new UserId(userId), new UserEmail(email), new UserName(firstName, secondName));
-        when(userRepository.saveUser(expectedUser)).thenThrow(new EntityNotFoundException(errorMessage));
+        when(userManagement.changeUser(expectedUser)).thenThrow(new EntityNotFoundException(errorMessage));
 
         UserRestDto userRequest = new UserRestDto(email, firstName, secondName);
 
@@ -151,7 +151,7 @@ class UserControllerIT {
         String secondName = "Doe";
 
         User expectedUser = new User(new UserId(userId), new UserEmail(email), new UserName(firstName, secondName));
-        when(userRepository.saveUser(expectedUser)).thenThrow(new RuntimeException("test message"));
+        when(userManagement.changeUser(expectedUser)).thenThrow(new RuntimeException("test message"));
 
         UserRestDto userRequest = new UserRestDto(email, firstName, secondName);
 
@@ -171,7 +171,7 @@ class UserControllerIT {
 
         User expectedUser = new User(new UserId(userId), new UserEmail(email), new UserName(firstName, secondName));
 
-        when(userRepository.findUserById(new UserId(userId))).thenReturn(expectedUser);
+        when(userManagement.findUser(new UserId(userId))).thenReturn(expectedUser);
 
         mvc.perform(get("/users/user/" + userId)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -187,7 +187,7 @@ class UserControllerIT {
         int userId = 15;
         String errorMessage = "No user found";
 
-        when(userRepository.findUserById(new UserId(userId))).thenThrow(new EntityNotFoundException(errorMessage));
+        when(userManagement.findUser(new UserId(userId))).thenThrow(new EntityNotFoundException(errorMessage));
 
         mvc.perform(get("/users/user/" + userId)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -209,7 +209,7 @@ class UserControllerIT {
     void whenGetUser_givenUnexpectedError_shouldNotReturnMessage() throws Exception {
         int userId = 15;
 
-        when(userRepository.findUserById(new UserId(userId))).thenThrow(new RuntimeException("dummy err msg"));
+        when(userManagement.findUser(new UserId(userId))).thenThrow(new RuntimeException("dummy err msg"));
 
         mvc.perform(get("/users/user/" + userId)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -231,7 +231,7 @@ class UserControllerIT {
         String secondName2 = "Doe";
         User user2 = new User(new UserId(userId2), new UserEmail(email2), new UserName(firstName2, secondName2));
 
-        when(userRepository.getAllUsers()).thenReturn(Arrays.asList(user1, user2));
+        when(userManagement.getAllUsers()).thenReturn(Arrays.asList(user1, user2));
 
         mvc.perform(get("/users/users")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -250,7 +250,7 @@ class UserControllerIT {
 
     @Test
     void whenGetUsers_givenUnexpectedError_shouldNotReturnMessage() throws Exception {
-        when(userRepository.getAllUsers()).thenThrow(new RuntimeException("yet another error"));
+        when(userManagement.getAllUsers()).thenThrow(new RuntimeException("yet another error"));
 
         mvc.perform(get("/users/users")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -281,7 +281,7 @@ class UserControllerIT {
         int userId = 6;
         String errorMessage = "entity not found";
 
-        doThrow(new EntityNotFoundException(errorMessage)).when(userRepository).deleteUser(new UserId(userId));
+        doThrow(new EntityNotFoundException(errorMessage)).when(userManagement).unregisterUser(new UserId(userId));
 
         mvc.perform(delete("/users/user/" + userId)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -293,7 +293,7 @@ class UserControllerIT {
     void whenDeleteUser_givenUnexpectedError_shouldNotReturnMessage() throws Exception {
         int userId = 6;
 
-        doThrow(new RuntimeException("Spooky error")).when(userRepository).deleteUser(new UserId(userId));
+        doThrow(new RuntimeException("Spooky error")).when(userManagement).unregisterUser(new UserId(userId));
 
         mvc.perform(delete("/users/user/" + userId)
                 .contentType(MediaType.APPLICATION_JSON))
