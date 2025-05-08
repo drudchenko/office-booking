@@ -12,7 +12,7 @@ import lombok.extern.log4j.Log4j2;
 import org.denysr.learning.office_booking.domain.user.User;
 import org.denysr.learning.office_booking.domain.user.User.UserBuilder;
 import org.denysr.learning.office_booking.domain.user.UserId;
-import org.denysr.learning.office_booking.domain.user.UserRepository;
+import org.denysr.learning.office_booking.domain.user.UserManagement;
 import org.denysr.learning.office_booking.domain.validation.EntityNotFoundException;
 import org.denysr.learning.office_booking.domain.validation.IllegalValueException;
 import org.denysr.learning.office_booking.infrastructure.rest.ErrorResponse;
@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Log4j2
 final public class UserController {
-    private final UserRepository userRepository;
+    private final UserManagement userManagement;
     private final ModelMapper modelMapper;
 
     @Operation(summary = "Create user", description = "Creating a new user")
@@ -54,7 +54,7 @@ final public class UserController {
     ) {
         try {
             final UserBuilder userBuilder = modelMapper.map(userDto, UserBuilder.class);
-            final UserId userId = userRepository.saveUser(userBuilder.build());
+            final UserId userId = userManagement.registerUser(userBuilder.build());
             return ResponseEntity.status(HttpStatus.CREATED).body(userId);
         } catch (MappingException e) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
@@ -90,7 +90,7 @@ final public class UserController {
         try {
             final UserBuilder userBuilder = modelMapper.map(userDto, UserBuilder.class)
                     .withUserId(new UserId(userId));
-            final UserId userIdObject = userRepository.saveUser(userBuilder.build());
+            final UserId userIdObject = userManagement.changeUser(userBuilder.build());
             return ResponseEntity.ok(userIdObject);
         } catch (MappingException e) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
@@ -123,7 +123,7 @@ final public class UserController {
             int userId
     ) {
         try {
-            final User user = userRepository.findUserById(new UserId(userId));
+            final User user = userManagement.findUser(new UserId(userId));
             return ResponseEntity.ok().body(modelMapper.map(user, UserResponseEntity.class));
         } catch (IllegalValueException e) {
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(new ErrorResponse(e.getMessage()));
@@ -148,7 +148,7 @@ final public class UserController {
     public ResponseEntity<?> getUsers() {
         try {
             return ResponseEntity.ok(
-                    userRepository
+                    userManagement
                             .getAllUsers()
                             .stream()
                             .map(user -> modelMapper.map(user, UserResponseEntity.class))
@@ -177,7 +177,7 @@ final public class UserController {
             int userId
     ) {
         try {
-            userRepository.deleteUser(new UserId(userId));
+            userManagement.unregisterUser(new UserId(userId));
             return ResponseEntity.ok().build();
         } catch (IllegalValueException e) {
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(new ErrorResponse(e.getMessage()));
