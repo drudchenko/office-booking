@@ -1,5 +1,5 @@
 # What
-Just a test application, which provides API for booking office spots for the team.
+Just a test application, which provides API for booking office spots for the team. Includes also use management.
 
 # Why
 for fun and to explore the functionality of Visual Studio Code :-)
