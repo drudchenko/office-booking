@@ -39,7 +39,7 @@ public class UserManagement {
             throw new UserIdMissingException("User should contain ID!");
         }
         UserId userId = userRepository.saveUser(user);
-        if (!userId.equals(user.userId())) {
+        if (userId == null || !userId.equals(user.userId())) {
             throw new UserIdMismatchException("User ID mismatch! Something may have gone wrong!");
         }
         return userId;
