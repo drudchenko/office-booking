@@ -10,6 +10,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.denysr.learning.office_booking.domain.user.exceptions.UserAlreadyRegisteredException;
+import org.denysr.learning.office_booking.domain.user.exceptions.UserIdMissingException;
+import org.denysr.learning.office_booking.domain.user.exceptions.UserIdMismatchException;
 
 @ExtendWith(MockitoExtension.class)
 class UserManagementTest {
@@ -62,7 +65,7 @@ class UserManagementTest {
     void registerUser_shouldThrowException_whenUserIsAlreadyRegistered() {
         User user = new User(new UserId(123), new UserEmail("existing.user@example.com"), new UserName("Existing", "User"));
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+        UserAlreadyRegisteredException exception = assertThrows(UserAlreadyRegisteredException.class, () -> {
             userManagement.registerUser(user);
         });
 
@@ -85,7 +88,7 @@ class UserManagementTest {
     void changeUser_shouldThrowException_whenUserHasNoId() {
         User user = new User(null, new UserEmail("no@example.com"), new UserName("No ID", "User"));
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+        UserIdMissingException exception = assertThrows(UserIdMissingException.class, () -> {
             userManagement.changeUser(user);
         });
 
@@ -98,11 +101,11 @@ class UserManagementTest {
         User user = new User(new UserId(123), new UserEmail("mismatched@example.com"), new UserName("Mismatched" ,"User"));
         when(userRepository.saveUser(user)).thenReturn(new UserId(456));
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+        UserIdMismatchException exception = assertThrows(UserIdMismatchException.class, () -> {
             userManagement.changeUser(user);
         });
 
-        assertEquals("User ID mismatch! something may have gone wrong!", exception.getMessage());
+        assertEquals("User ID mismatch! Something may have gone wrong!", exception.getMessage());
         verify(userRepository).saveUser(user);
     }
 
