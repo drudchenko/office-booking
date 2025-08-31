@@ -1,6 +1,6 @@
 plugins {
-    id 'org.springframework.boot' version '3.4.5'
-    id 'io.spring.dependency-management' version '1.1.7'
+    alias(libs.plugins.springBoot)
+    alias(libs.plugins.springDependencyManagement)
     id 'java'
 }
 
@@ -33,11 +33,11 @@ dependencies {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
 
-    implementation group: 'com.h2database', name: 'h2', version: property("version.h2")
-    implementation group: 'org.modelmapper', name: 'modelmapper', version: property("version.modelmapper")
-    implementation group: 'commons-validator', name: 'commons-validator', version: property("version.commons-validator")
-    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: property("version.openapi-ui")
-    implementation group: 'org.hibernate', name: 'hibernate-validator', version: property("version.hibernate-validator")
+    implementation libs.h2
+    implementation libs.modelmapper
+    implementation libs.commonsValidator
+    implementation libs.springdocOpenapiUi
+    implementation libs.hibernateValidator
 }
 
 test {

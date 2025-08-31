@@ -1,0 +1,20 @@
+[versions]
+spring-boot = "3.5.5"
+spring-dependency-management = "1.1.7"
+
+h2 = "2.3.232"
+modelmapper = "3.2.2"
+commons-validator = "1.9.0"
+openapi-ui = "2.8.6"
+hibernate-validator = "8.0.2.Final"
+
+[plugins]
+springBoot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+springDependencyManagement = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management" }
+
+[libraries]
+h2 = { module = "com.h2database:h2", version.ref = "h2" }
+modelmapper = { module = "org.modelmapper:modelmapper", version.ref = "modelmapper" }
+commonsValidator = { module = "commons-validator:commons-validator", version.ref = "commons-validator" }
+springdocOpenapiUi = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "openapi-ui" }
+hibernateValidator = { module = "org.hibernate:hibernate-validator", version.ref = "hibernate-validator" }
