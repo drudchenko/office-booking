@@ -6,7 +6,7 @@ h2 = "2.3.232"
 modelmapper = "3.2.2"
 commons-validator = "1.9.0"
 openapi-ui = "2.8.6"
-hibernate-validator = "8.0.2.Final"
+hibernate-validator = "8.0.3.Final"
 
 [plugins]
 springBoot = { id = "org.springframework.boot", version.ref = "spring-boot" }
