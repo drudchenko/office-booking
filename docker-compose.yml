@@ -1,0 +1,10 @@
+services:
+  app:
+    build: .
+    image: office-booking:latest
+    container_name: office-booking-app
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    restart: unless-stopped

@@ -1,0 +1,12 @@
+.git
+.gradle
+build
+target
+.vscode
+.github
+*.log
+.DS_Store
+gradlew
+gradlew.bat
+gradle/
+bin/
