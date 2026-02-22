@@ -6,8 +6,8 @@ for fun and to explore the functionality of Visual Studio Code :-)
 
 # Prerequisites
 To run the application you should have:
-- JDK (was tested with OpenJDK 21)
-- Gradle (was tested with Gradle 8.14)
+- JDK (was tested with OpenJDK 25)
+- Gradle (was tested with Gradle 9.3.1)
 
 ## How to run
 Just run the following command: 
