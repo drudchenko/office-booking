@@ -4,9 +4,9 @@ spring-dependency-management = "1.1.7"
 
 h2 = "2.4.240"
 modelmapper = "3.2.6"
-commons-validator = "1.10.0"
+commons-validator = "1.10.1"
 openapi-ui = "3.0.1"
-hibernate-validator = "9.0.1.Final"
+hibernate-validator = "9.1.0.Final"
 
 [plugins]
 springBoot = { id = "org.springframework.boot", version.ref = "spring-boot" }
