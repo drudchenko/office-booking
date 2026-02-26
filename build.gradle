@@ -49,8 +49,7 @@ dependencies {
     implementation libs.springdocOpenapiUi
     implementation libs.hibernateValidator
 
-    e2eImplementation libs.testcontainers.junit.jupiter
-    e2eImplementation libs.testcontainers
+    e2eImplementation libs.bundles.testcontainers
 }
 
 configurations {
