@@ -7,7 +7,7 @@ modelmapper = "3.2.6"
 commons-validator = "1.10.1"
 openapi-ui = "3.0.1"
 hibernate-validator = "9.1.0.Final"
-testcontainers = "2.0.3"
+testcontainers = "1.21.4"
 
 [plugins]
 springBoot = { id = "org.springframework.boot", version.ref = "spring-boot" }
