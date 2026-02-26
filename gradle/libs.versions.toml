@@ -7,6 +7,7 @@ modelmapper = "3.2.6"
 commons-validator = "1.10.1"
 openapi-ui = "3.0.1"
 hibernate-validator = "9.1.0.Final"
+testcontainers = "1.19.7"
 
 [plugins]
 springBoot = { id = "org.springframework.boot", version.ref = "spring-boot" }
@@ -18,3 +19,5 @@ modelmapper = { module = "org.modelmapper:modelmapper", version.ref = "modelmapp
 commonsValidator = { module = "commons-validator:commons-validator", version.ref = "commons-validator" }
 springdocOpenapiUi = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "openapi-ui" }
 hibernateValidator = { module = "org.hibernate.validator:hibernate-validator", version.ref = "hibernate-validator" }
+testcontainers-junit-jupiter = { module = "org.testcontainers:junit-jupiter", version.ref = "testcontainers" }
+testcontainers = { module = "org.testcontainers:testcontainers", version.ref = "testcontainers" }
