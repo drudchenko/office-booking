@@ -1,7 +1,7 @@
 package org.denysr.learning.office_booking.infrastructure.rest;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;;
+import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
