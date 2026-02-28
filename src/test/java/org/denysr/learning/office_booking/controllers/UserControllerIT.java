@@ -66,7 +66,7 @@ class UserControllerIT {
         mvc.perform(post("/users/user")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(userRequest)))
-                .andExpect(status().isUnprocessableEntity())
+                .andExpect(status().isUnprocessableContent())
                 .andExpect(jsonPath("$.error", is("Invalid email provided")));
     }
 
@@ -119,7 +119,7 @@ class UserControllerIT {
         mvc.perform(put("/users/user/" + userId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(userRequest)))
-                .andExpect(status().isUnprocessableEntity())
+                .andExpect(status().isUnprocessableContent())
                 .andExpect(jsonPath("$.error", is("Name length should be between 2 and 70")));
     }
 
