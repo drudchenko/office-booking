@@ -57,7 +57,7 @@ final public class UserController {
             final UserId userId = userManagement.registerUser(userBuilder.build());
             return ResponseEntity.status(HttpStatus.CREATED).body(userId);
         } catch (MappingException e) {
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT)
                     .body(new ErrorResponse(e.getCause().getMessage()));
         } catch (Exception e) {
             log.error("Error processing user creation", e);
