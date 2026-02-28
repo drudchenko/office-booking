@@ -87,7 +87,7 @@ class OfficeBookingControllerIT {
         mvc.perform(post("/office/booking")
                 .content(objectMapper.writeValueAsString(params))
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isUnprocessableEntity())
+                .andExpect(status().isUnprocessableContent())
                 .andExpect(jsonPath("$.error", is("End date should be after start date")));
     }
 

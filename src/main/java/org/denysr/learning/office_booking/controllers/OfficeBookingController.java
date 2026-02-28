@@ -67,7 +67,7 @@ final public class OfficeBookingController {
             );
             return ResponseEntity.status(HttpStatus.CREATED).body(bookingId);
         } catch (IllegalValueException e) {
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(new ErrorResponse(e.getMessage()));
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT).body(new ErrorResponse(e.getMessage()));
         } catch (Exception e) {
             log.error("Error processing booking creation", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse(""));
