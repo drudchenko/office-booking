@@ -25,3 +25,6 @@ jobs:
 
       - name: Run Tests
         run: ./gradlew test --no-daemon
+
+      - name: Run e2e Tests
+        run: ./gradlew e2eTest --no-daemon
