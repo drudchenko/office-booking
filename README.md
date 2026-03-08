@@ -1,17 +1,29 @@
-# What
-Just a test application, which provides API for booking office spots for the team. Includes also use management.
+# Office Booking Application
 
-# Why
-for fun and to explore the functionality of Visual Studio Code :-)
+## What
+A test application that provides a REST API for booking office spots for a team. It includes basic user management functionalities.
 
-# Prerequisites
+## Why
+This project was created for learning and exploration purposes.
+
+## Technologies
+- Java 25
+- Spring Boot
+- Gradle 9
+- Springdoc OpenAPI UI
+
+## Prerequisites
 To run the application you should have:
-- JDK (was tested with OpenJDK 25)
-- Gradle (was tested with Gradle 9.3.1)
+- JDK 25
 
 ## How to run
-Just run the following command: 
-`gradlew bootRun`.
-Or just run OfficeBookingApplication in your IDE.
+You can run the application in one of the following ways:
 
-You can access the API under the url http://localhost:8080/swagger-ui.html.
+1.  **Using the Gradle wrapper:**
+    ```bash
+    ./gradlew bootRun
+    ```
+2.  **Running the main application class** `OfficeBookingApplication` in your IDE.
+
+After starting the application, you can access the API documentation via Swagger UI at the following URL:
+[http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
