@@ -40,6 +40,10 @@ dependencies {
     implementation libs.commonsValidator
     implementation libs.springdocOpenapiUi
     implementation libs.hibernateValidator
+
+    testImplementation libs.postgresql
+    testImplementation libs.testcontainersJunitJupiter
+    testImplementation libs.testcontainersPostgresql
 }
 
 test {
