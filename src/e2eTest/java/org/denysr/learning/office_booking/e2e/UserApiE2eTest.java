@@ -4,10 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -17,14 +17,14 @@ import com.fasterxml.jackson.databind.JsonNode;
  * Tests share one application instance and therefore one database, so every test registers its own
  * user under a unique email instead of relying on a known database state.
  */
+@ExtendWith(ApplicationUnderTest.class)
 class UserApiE2eTest {
     private static final AtomicInteger EMAIL_COUNTER = new AtomicInteger();
 
-    private static UserApiClient api;
+    private final UserApiClient api;
 
-    @BeforeAll
-    static void startApplication() {
-        api = new UserApiClient(AppUnderTest.baseUrl());
+    UserApiE2eTest(UserApiClient api) {
+        this.api = api;
     }
 
     @Test
