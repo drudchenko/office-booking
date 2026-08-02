@@ -101,7 +101,9 @@ public class ModelMapperConfig {
         bookingtoJpaMap.setProvider(request -> {
             Booking source = (Booking) request.getSource();
             BookingJpaDto bookingJpaDto = new BookingJpaDto();
-            bookingJpaDto.setBookingId(source.bookingId().bookingId());
+            if (source.hasId()) {
+                bookingJpaDto.setBookingId(source.bookingId().bookingId());
+            }
             bookingJpaDto.setStartDate(source.bookingDateRange().getStartDate());
             bookingJpaDto.setEndDate(source.bookingDateRange().getEndDate());
             bookingJpaDto.setUserDto(modelMapper.map(source.user(), UserJpaDto.class));

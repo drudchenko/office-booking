@@ -18,9 +18,14 @@ record ApiResponse(int status, String body) {
         }
     }
 
-    /** Id returned by the create and change endpoints. */
+    /** Id returned by the user create and change endpoints. */
     int userId() {
         return json().path("userId").asInt();
+    }
+
+    /** Id returned by the booking create endpoint. */
+    int bookingId() {
+        return json().path("bookingId").asInt();
     }
 
     /** Message of an {@code ErrorResponse}. */

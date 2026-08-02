@@ -36,9 +36,10 @@ final class ApplicationUnderTest implements BeforeAllCallback, ParameterResolver
     private static final Namespace NAMESPACE = Namespace.create(ApplicationUnderTest.class);
 
     /** The injectable API clients, each built from the base URL of the running application. */
-    private static final Map<Class<?>, Function<String, Object>> CLIENTS =
-            Map.<Class<?>, Function<String, Object>>of(
-                    UserApiClient.class, UserApiClient::new
+    private static final Map<Class<? extends ApiClient>, Function<String, ApiClient>> CLIENTS =
+            Map.<Class<? extends ApiClient>, Function<String, ApiClient>>of(
+                    UserApiClient.class, UserApiClient::new,
+                    BookingApiClient.class, BookingApiClient::new
             );
 
     /** Fail on startup problems here rather than on the first test that touches the API. */
@@ -76,7 +77,7 @@ final class ApplicationUnderTest implements BeforeAllCallback, ParameterResolver
 
         private final GenericContainer<?> container;
         private final String baseUrl;
-        private final Map<Class<?>, Object> clients = new ConcurrentHashMap<>();
+        private final Map<Class<?>, ApiClient> clients = new ConcurrentHashMap<>();
 
         private RunningApplication() {
             container = createContainer();
@@ -88,7 +89,7 @@ final class ApplicationUnderTest implements BeforeAllCallback, ParameterResolver
         }
 
         /** One client per type, created on first use and shared by every test that asks for it. */
-        private Object client(Class<?> type) {
+        private ApiClient client(Class<?> type) {
             return clients.computeIfAbsent(type, key -> CLIENTS.get(key).apply(baseUrl));
         }
 
