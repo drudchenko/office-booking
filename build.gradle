@@ -20,6 +20,14 @@ configurations {
     }
 }
 
+/*
+ * End-to-end tests live in their own source set and deliberately do NOT see the main classes:
+ * they talk to the containerised application over HTTP only.
+ */
+sourceSets {
+    e2eTest
+}
+
 repositories {
     mavenCentral()
 }
@@ -40,8 +48,42 @@ dependencies {
     implementation libs.commonsValidator
     implementation libs.springdocOpenapiUi
     implementation libs.hibernateValidator
+
+    // Versions of the test libraries below are managed by the Spring Boot BOM.
+    e2eTestImplementation 'org.testcontainers:testcontainers'
+    e2eTestImplementation 'org.junit.jupiter:junit-jupiter'
+    e2eTestImplementation 'org.assertj:assertj-core'
+    e2eTestImplementation 'com.fasterxml.jackson.core:jackson-databind'
+    e2eTestRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    e2eTestRuntimeOnly 'ch.qos.logback:logback-classic'
 }
 
 test {
     useJUnitPlatform()
+}
+
+tasks.register('e2eTest', Test) {
+    group = 'verification'
+    description = 'Runs end-to-end tests against the application running in a container.'
+
+    testClassesDirs = sourceSets.e2eTest.output.classesDirs
+    classpath = sourceSets.e2eTest.runtimeClasspath
+
+    useJUnitPlatform()
+    shouldRunAfter tasks.named('test')
+
+    // Where to find the Dockerfile when the test has to build the image itself.
+    systemProperty 'e2e.projectRoot', projectDir.absolutePath
+    // CI builds the image up front and passes it in with -Pe2eImage=office-booking:e2e.
+    if (project.hasProperty('e2eImage')) {
+        systemProperty 'e2e.image', project.property('e2eImage')
+    }
+
+    // The system under test is a container, so Gradle cannot tell whether a previous result still holds.
+    outputs.upToDateWhen { false }
+
+    testLogging {
+        events 'passed', 'skipped', 'failed'
+        exceptionFormat 'full'
+    }
 }
