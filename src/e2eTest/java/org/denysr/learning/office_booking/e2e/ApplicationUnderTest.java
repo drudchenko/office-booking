@@ -38,7 +38,8 @@ final class ApplicationUnderTest implements BeforeAllCallback, ParameterResolver
     /** The injectable API clients, each built from the base URL of the running application. */
     private static final Map<Class<?>, Function<String, Object>> CLIENTS =
             Map.<Class<?>, Function<String, Object>>of(
-                    UserApiClient.class, UserApiClient::new
+                    UserApiClient.class, UserApiClient::new,
+                    BookingApiClient.class, BookingApiClient::new
             );
 
     /** Fail on startup problems here rather than on the first test that touches the API. */

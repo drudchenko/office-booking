@@ -52,6 +52,24 @@ public class BookingDtoMappingTest {
     }
 
     @Test
+    void shouldConvertNotYetSavedDomainBookingToJpaDto() {
+        Booking booking = Booking.builder()
+                .withUser(USER)
+                .withBookingDateRange(new BookingDateRange(START_DATE, END_DATE))
+                .build();
+
+        BookingJpaDto bookingJpaDto = modelMapper.map(booking, BookingJpaDto.class);
+
+        assertAll(
+                // The id is a primitive, so 0 is what Hibernate reads as "not saved yet".
+                () -> assertEquals(0, bookingJpaDto.getBookingId()),
+                () -> assertEquals(USER_DTO, bookingJpaDto.getUserDto()),
+                () -> assertEquals(START_DATE, bookingJpaDto.getStartDate()),
+                () -> assertEquals(END_DATE, bookingJpaDto.getEndDate())
+        );
+    }
+
+    @Test
     void shouldConvertJpaDtoBookingToDomainModel() {
         BookingJpaDto bookingJpaDto = new BookingJpaDto(BOOKING_ID, USER_DTO, START_DATE, END_DATE);
 
