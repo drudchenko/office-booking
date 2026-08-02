@@ -1,30 +1,30 @@
-package org.denysr.learning.office_booking.e2e;
+package org.denysr.learning.office_booking.e2e.harness;
 
 /** Client for the {@code /users} API. */
-final class UserApiClient implements ApiClient {
+public final class UserApiClient implements ApiClient {
     private final HttpCalls http;
 
-    UserApiClient(String baseUrl) {
+    public UserApiClient(String baseUrl) {
         this.http = new HttpCalls(baseUrl);
     }
 
-    ApiResponse createUser(UserPayload user) {
+    public ApiResponse createUser(UserPayload user) {
         return http.send(http.request("/users/user").POST(HttpCalls.jsonBody(user)));
     }
 
-    ApiResponse changeUser(int userId, UserPayload user) {
+    public ApiResponse changeUser(int userId, UserPayload user) {
         return http.send(http.request("/users/user/" + userId).PUT(HttpCalls.jsonBody(user)));
     }
 
-    ApiResponse getUser(int userId) {
+    public ApiResponse getUser(int userId) {
         return http.send(http.request("/users/user/" + userId).GET());
     }
 
-    ApiResponse getAllUsers() {
+    public ApiResponse getAllUsers() {
         return http.send(http.request("/users/users").GET());
     }
 
-    ApiResponse deleteUser(int userId) {
+    public ApiResponse deleteUser(int userId) {
         return http.send(http.request("/users/user/" + userId).DELETE());
     }
 }

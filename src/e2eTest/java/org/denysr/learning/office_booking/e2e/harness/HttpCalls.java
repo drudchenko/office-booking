@@ -1,4 +1,4 @@
-package org.denysr.learning.office_booking.e2e;
+package org.denysr.learning.office_booking.e2e.harness;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;

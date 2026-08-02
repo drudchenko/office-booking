@@ -1,25 +1,25 @@
-package org.denysr.learning.office_booking.e2e;
+package org.denysr.learning.office_booking.e2e.harness;
 
 import java.time.LocalDate;
 
 /** Client for the {@code /office} API. */
-final class BookingApiClient implements ApiClient {
+public final class BookingApiClient implements ApiClient {
     private final HttpCalls http;
 
-    BookingApiClient(String baseUrl) {
+    public BookingApiClient(String baseUrl) {
         this.http = new HttpCalls(baseUrl);
     }
 
-    ApiResponse createBooking(BookingPayload booking) {
+    public ApiResponse createBooking(BookingPayload booking) {
         return http.send(http.request("/office/booking").POST(HttpCalls.jsonBody(booking)));
     }
 
     /** Bookings of the whole business week that the given day falls into. */
-    ApiResponse getBookingsForWeekOf(LocalDate businessDay) {
+    public ApiResponse getBookingsForWeekOf(LocalDate businessDay) {
         return http.send(http.request("/office/bookings/" + businessDay).GET());
     }
 
-    ApiResponse deleteBooking(int bookingId) {
+    public ApiResponse deleteBooking(int bookingId) {
         return http.send(http.request("/office/booking/" + bookingId).DELETE());
     }
 }

@@ -1,4 +1,4 @@
-package org.denysr.learning.office_booking.e2e;
+package org.denysr.learning.office_booking.e2e.harness;
 
 import java.nio.file.Path;
 import java.time.Duration;
@@ -32,7 +32,7 @@ import org.testcontainers.utility.DockerImageName;
  * {@code ./gradlew e2eTest} works with nothing prepared up front. Pass {@code -Pe2eImage=<image>}
  * to test an image that was built beforehand - that is what CI does.
  */
-final class ApplicationUnderTest implements BeforeAllCallback, ParameterResolver {
+public final class ApplicationUnderTest implements BeforeAllCallback, ParameterResolver {
     private static final Namespace NAMESPACE = Namespace.create(ApplicationUnderTest.class);
 
     /** The injectable API clients, each built from the base URL of the running application. */

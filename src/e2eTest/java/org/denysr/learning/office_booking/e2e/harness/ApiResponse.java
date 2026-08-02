@@ -1,4 +1,4 @@
-package org.denysr.learning.office_booking.e2e;
+package org.denysr.learning.office_booking.e2e.harness;
 
 import java.io.UncheckedIOException;
 
@@ -7,10 +7,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /** Raw HTTP response, kept unparsed so that error paths can be asserted as easily as happy ones. */
-record ApiResponse(int status, String body) {
+public record ApiResponse(int status, String body) {
     private static final ObjectMapper JSON = new ObjectMapper();
 
-    JsonNode json() {
+    public JsonNode json() {
         try {
             return JSON.readTree(body);
         } catch (JsonProcessingException e) {
@@ -19,17 +19,17 @@ record ApiResponse(int status, String body) {
     }
 
     /** Id returned by the user create and change endpoints. */
-    int userId() {
+    public int userId() {
         return json().path("userId").asInt();
     }
 
     /** Id returned by the booking create endpoint. */
-    int bookingId() {
+    public int bookingId() {
         return json().path("bookingId").asInt();
     }
 
     /** Message of an {@code ErrorResponse}. */
-    String error() {
+    public String error() {
         return json().path("error").asText();
     }
 

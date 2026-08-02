@@ -1,4 +1,4 @@
-package org.denysr.learning.office_booking.e2e;
+package org.denysr.learning.office_booking.e2e.harness;
 
 /**
  * Marks a client of one part of the API. Implementations take the base URL of the running
