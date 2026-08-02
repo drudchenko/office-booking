@@ -13,6 +13,7 @@ import org.denysr.learning.office_booking.domain.user.User;
 import org.denysr.learning.office_booking.domain.user.User.UserBuilder;
 import org.denysr.learning.office_booking.domain.user.UserId;
 import org.denysr.learning.office_booking.domain.user.UserManagement;
+import org.denysr.learning.office_booking.domain.user.exceptions.EmailAlreadyTakenException;
 import org.denysr.learning.office_booking.domain.validation.EntityNotFoundException;
 import org.denysr.learning.office_booking.domain.validation.IllegalValueException;
 import org.denysr.learning.office_booking.infrastructure.rest.ErrorResponse;
@@ -44,6 +45,8 @@ final public class UserController {
                     description = "Invalid parameter(s) supplied",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
             ),
+            @ApiResponse(responseCode = "409", description = "Email is already taken by another user",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "Unknown server error",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
     })
@@ -59,6 +62,8 @@ final public class UserController {
         } catch (MappingException e) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT)
                     .body(new ErrorResponse(e.getCause().getMessage()));
+        } catch (EmailAlreadyTakenException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse(e.getMessage()));
         } catch (Exception e) {
             log.error("Error processing user creation", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse(""));
@@ -75,6 +80,8 @@ final public class UserController {
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
             ),
             @ApiResponse(responseCode = "404", description = "User with mentioned id not found",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "409", description = "Email is already taken by another user",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "Unknown server error",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
@@ -97,6 +104,8 @@ final public class UserController {
                     .body(new ErrorResponse(e.getCause().getMessage()));
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(e.getMessage()));
+        } catch (EmailAlreadyTakenException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse(e.getMessage()));
         } catch (Exception e) {
             log.error("Error changing user", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse(""));
