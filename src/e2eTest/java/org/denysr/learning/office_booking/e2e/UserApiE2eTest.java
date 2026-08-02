@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -165,14 +164,7 @@ class UserApiE2eTest {
         assertThat(response.error()).isEqualTo("User id should be above 0.");
     }
 
-    /*
-     * The tests below describe how the API is documented to behave on the "unknown user" and
-     * "email already taken" paths. They are disabled because the application does not behave that
-     * way yet - enable them together with the fix rather than weakening the expectations.
-     */
-
     @Test
-    @Disabled("Known defect: deleteById is a no-op for unknown ids, so the endpoint answers 200")
     @DisplayName("Unregistering an unknown user reports not found")
     void deletingUnknownUserReportsNotFound() {
         final ApiResponse response = api.deleteUser(Integer.MAX_VALUE);
@@ -181,7 +173,6 @@ class UserApiE2eTest {
     }
 
     @Test
-    @Disabled("Known defect: mapping the missing row blows up, so the endpoint answers 500")
     @DisplayName("Reading an unknown user reports not found")
     void readingUnknownUserReportsNotFound() {
         final ApiResponse response = api.getUser(Integer.MAX_VALUE);
@@ -190,7 +181,6 @@ class UserApiE2eTest {
     }
 
     @Test
-    @Disabled("Known defect: the endpoint answers 500 instead of reporting the unknown id")
     @DisplayName("Changing an unknown user reports not found")
     void changingUnknownUserReportsNotFound() {
         final ApiResponse response =
@@ -200,7 +190,6 @@ class UserApiE2eTest {
     }
 
     @Test
-    @Disabled("Known defect: the unique email constraint surfaces as 500 instead of a client error")
     @DisplayName("Registering an email that is already taken is rejected")
     void duplicateEmailIsRejected() {
         final String email = uniqueEmail();
