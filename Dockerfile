@@ -8,11 +8,14 @@ COPY gradle gradle
 COPY build.gradle settings.gradle ./
 COPY gradle.properties ./
 
+# Resolve dependencies in their own layer, so that a source change does not re-download them
+RUN ./gradlew --no-daemon dependencies --configuration runtimeClasspath
+
 # Copy source code
 COPY src src
 
 # Build the application
-RUN ./gradlew build -x test
+RUN ./gradlew --no-daemon bootJar
 
 # Run stage
 FROM eclipse-temurin:25-jre
