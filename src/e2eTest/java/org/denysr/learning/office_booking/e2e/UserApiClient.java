@@ -1,7 +1,7 @@
 package org.denysr.learning.office_booking.e2e;
 
 /** Client for the {@code /users} API. */
-final class UserApiClient {
+final class UserApiClient implements ApiClient {
     private final HttpCalls http;
 
     UserApiClient(String baseUrl) {

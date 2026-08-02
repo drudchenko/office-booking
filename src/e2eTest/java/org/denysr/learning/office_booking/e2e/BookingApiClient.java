@@ -3,7 +3,7 @@ package org.denysr.learning.office_booking.e2e;
 import java.time.LocalDate;
 
 /** Client for the {@code /office} API. */
-final class BookingApiClient {
+final class BookingApiClient implements ApiClient {
     private final HttpCalls http;
 
     BookingApiClient(String baseUrl) {
