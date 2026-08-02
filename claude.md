@@ -93,13 +93,24 @@ Layout of `src/e2eTest/java/org/denysr/learning/office_booking/e2e/`:
 
 | File | Role |
 | --- | --- |
+| `UserApiE2eTest` / `BookingApiE2eTest` | The tests, each `@ExtendWith(ApplicationUnderTest.class)` |
+| `../resources/logback-test.xml` | Quiets Testcontainers and application container output |
+
+The harness the tests run against lives one level down, in `.../e2e/harness/`, so the package holding
+the tests only ever holds tests:
+
+| File | Role |
+| --- | --- |
 | `ApplicationUnderTest` | JUnit extension: starts the app container, injects API clients |
 | `ApiClient` | Marker interface; implementations take the base URL as the only ctor argument |
 | `HttpCalls` | Shared `java.net.http` plumbing and JSON serialisation |
 | `ApiResponse` | Raw `(status, body)` record with `json()`, `userId()`, `bookingId()`, `error()` helpers |
 | `UserApiClient` / `BookingApiClient` | Clients for `/users` and `/office` |
-| `UserApiE2eTest` / `BookingApiE2eTest` | The tests, each `@ExtendWith(ApplicationUnderTest.class)` |
-| `../resources/logback-test.xml` | Quiets Testcontainers and application container output |
+| `UserPayload` / `BookingPayload` | Request bodies for the user and booking endpoints |
+
+Everything the tests reference (`ApplicationUnderTest`, the API clients, `ApiResponse`, the payload
+records) is `public` because it now lives in a separate package; `ApiClient` and `HttpCalls` stay
+package-private since they are only used inside `harness` itself.
 
 How it runs:
 - `ApplicationUnderTest` keeps the container in the JUnit **launcher session store**, so it is

@@ -12,6 +12,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import org.denysr.learning.office_booking.e2e.harness.ApiResponse;
+import org.denysr.learning.office_booking.e2e.harness.ApplicationUnderTest;
+import org.denysr.learning.office_booking.e2e.harness.BookingApiClient;
+import org.denysr.learning.office_booking.e2e.harness.BookingPayload;
+import org.denysr.learning.office_booking.e2e.harness.UserApiClient;
+import org.denysr.learning.office_booking.e2e.harness.UserPayload;
+
 /**
  * End-to-end coverage of the basic booking path against the application running in a container.
  * <p>
