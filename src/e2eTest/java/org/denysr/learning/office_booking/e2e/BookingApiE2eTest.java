@@ -6,7 +6,6 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -118,13 +117,7 @@ class BookingApiE2eTest {
         assertThat(response.error()).isEqualTo("Booking id should be above 0.");
     }
 
-    /*
-     * As with the user API, the paths below are documented behaviour the application does not
-     * implement yet. Enable them together with the fix rather than weakening the expectations.
-     */
-
     @Test
-    @Disabled("Known defect: mapping the missing user blows up, so the endpoint answers 500")
     @DisplayName("Booking for an unknown user reports a client error")
     void bookingForUnknownUserIsRejected() {
         final LocalDate monday = ownWeek();
@@ -136,7 +129,6 @@ class BookingApiE2eTest {
     }
 
     @Test
-    @Disabled("Known defect: deleteById is a no-op for unknown ids, so the endpoint answers 200")
     @DisplayName("Deleting an unknown booking reports not found")
     void deletingUnknownBookingReportsNotFound() {
         final ApiResponse response = bookings.deleteBooking(Integer.MAX_VALUE);

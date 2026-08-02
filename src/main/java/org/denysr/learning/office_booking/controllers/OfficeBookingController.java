@@ -52,6 +52,8 @@ final public class OfficeBookingController {
                     description = "Invalid parameter(s) supplied",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
             ),
+            @ApiResponse(responseCode = "404", description = "User with mentioned id not found",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "500", description = "Unknown server error",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
     })
@@ -68,6 +70,8 @@ final public class OfficeBookingController {
             return ResponseEntity.status(HttpStatus.CREATED).body(bookingId);
         } catch (IllegalValueException e) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT).body(new ErrorResponse(e.getMessage()));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(e.getMessage()));
         } catch (Exception e) {
             log.error("Error processing booking creation", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse(""));
