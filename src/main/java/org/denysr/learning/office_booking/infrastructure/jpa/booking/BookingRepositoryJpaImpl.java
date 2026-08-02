@@ -8,7 +8,6 @@ import org.denysr.learning.office_booking.domain.booking.BusinessWeek;
 import org.denysr.learning.office_booking.domain.validation.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -35,12 +34,12 @@ public class BookingRepositoryJpaImpl implements BookingRepository {
                 ), new TypeToken<List<Booking>>() {}.getType());
     }
 
+    /** {@code deleteById} is a no-op for unknown ids, so the row has to be looked up first. */
     @Override
     public void deleteBooking(BookingId bookingId) throws EntityNotFoundException {
-        try {
-            jpaBookingRepository.deleteById(bookingId.bookingId());
-        } catch (EmptyResultDataAccessException e) {
-            throw new EntityNotFoundException("Booking with the mentioned id not found", e);
+        if (!jpaBookingRepository.existsById(bookingId.bookingId())) {
+            throw new EntityNotFoundException("Booking with id " + bookingId.bookingId() + " not found");
         }
+        jpaBookingRepository.deleteById(bookingId.bookingId());
     }
 }
